@@ -1,0 +1,9 @@
+<resources>
+    <string name="app_name" translatable="false">ProyectoIntegrador</string>
+
+    <string name="back4app_server_url">https://parseapi.back4app.com/</string>
+    <string name="back4app_app_id">vS5bt3pFabQRBPYNGCka2UlZh47CtAnUF6qZNgHM</string>
+    <string name="back4app_client_key">Z3xseeaPA2IDEdKOA7rOD7WUelC0rnHtPwu4h4gb</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+</resources>
