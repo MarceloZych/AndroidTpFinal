@@ -10,7 +10,6 @@ import com.example.proyectointegrador.R;
 import com.example.proyectointegrador.model.User;
 import com.parse.LogInCallback;
 import com.parse.Parse;
-import com.parse.ParseException;
 import com.parse.ParseUser;
 
 public class AuthProvider {
@@ -27,13 +26,18 @@ public class AuthProvider {
     {
         MutableLiveData<String> loginResult = new MutableLiveData<>();
 
-        ParseUser.logInInBackground(email, password, (user, e) -> {
-            if (e == null) {
-                loginResult.setValue(user.getObjectId());
-                Log.d("AuthProvider", "Login Exitoso: " + user.getObjectId());
-            }else {
-                Log.e("AuthProvider", "Error durante login: " + e);
-                loginResult.setValue(null);
+        ParseUser.logInInBackground(email, password, new LogInCallback() {
+            @Override
+            public void done(ParseUser user, com.parse.ParseException e) {
+                if (e == null) {
+                    //Login exitoso
+                    loginResult.setValue(user.getObjectId());
+                    Log.d("AuthProvider", "Login Exitoso: " + user.getObjectId());
+                }else {
+                    //Error en el login
+                    Log.e("AuthProvider", "Error durante login: " + e);
+                    loginResult.setValue(null);
+                }
             }
         });
         return loginResult;

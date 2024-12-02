@@ -61,6 +61,7 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.PostViewHolder
     public static class PostViewHolder extends RecyclerView.ViewHolder {
         TextView tvTitulo, tvDescripcion;
         ImageView ivImage1, ivImage2, ivImage3;
+
         public PostViewHolder(View itemView) {
             super(itemView);
             tvTitulo = itemView.findViewById(R.id.tvTitulo);
@@ -69,4 +70,5 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.PostViewHolder
             ivImage2 = itemView.findViewById(R.id.ivImage2);
             ivImage3 = itemView.findViewById(R.id.ivImage3);
         }
+    }
 }
