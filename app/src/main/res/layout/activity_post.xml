@@ -47,7 +47,7 @@
             </ImageView>
 
             <ImageView
-                android:id="@+id/circuloBlack"
+                android:id="@+id/circuloBack"
                 android:layout_width="40dp"
                 android:layout_height="40dp"
                 android:layout_margin="15dp"
@@ -110,7 +110,7 @@
                 app:boxBackgroundColorMode="none">
 
                 <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/etUsuario"
+                    android:id="@+id/tietUsuario"
                     style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -142,7 +142,7 @@
                 app:boxBackgroundColorMode="none">
 
                 <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/etMail"
+                    android:id="@+id/tietMail"
                     style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"

@@ -1,5 +1,7 @@
 package com.example.proyectointegrador.providers;
 
+import static com.parse.Parse.getApplicationContext;
+
 import android.content.Context;
 import android.util.Log;
 
@@ -80,6 +82,9 @@ public class AuthProvider {
         ParseUser.logOutInBackground(e -> {
             if (e == null) {
                 logoutResult.setValue(true);
+                if (getApplicationContext() != null) {
+                    getApplicationContext().getCacheDir().delete();
+                }
                 Log.d("AuthProvider", "Logout exitoso");
             } else {
                 logoutResult.setValue(false);

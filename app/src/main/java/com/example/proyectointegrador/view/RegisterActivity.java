@@ -22,11 +22,17 @@ public class RegisterActivity extends AppCompatActivity {
         binding = ActivityRegisterBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
         viewModel = new ViewModelProvider(this).get(RegisterViewModel.class);
+        viewModel.getRegisterResult().observe(this, new Observer<String>() {
+            @Override
+            public void onChanged(String result) {
+                showToast(result);
+            }
+        });
         manejarEventos();
     }
 
     private void manejarEventos() {
-        binding.circuloBlack.setOnClickListener(new View.OnClickListener() {
+        binding.circuloBack.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 finish();
@@ -42,8 +48,8 @@ public class RegisterActivity extends AppCompatActivity {
     }
 
     private void realizarRegistro() {
-        String usuario = binding.etUsuario.getText().toString().trim();
-        String email = binding.etMail.getText().toString().trim();
+        String usuario = binding.tietUsuario.getText().toString().trim();
+        String email = binding.tietMail.getText().toString().trim();
         String password1 = binding.etPassword1.getText().toString().trim();
         String password2 = binding.etPassword2.getText().toString().trim();
 
@@ -62,14 +68,11 @@ public class RegisterActivity extends AppCompatActivity {
             return;
         }
 
-        /*User user = new User(usuario, email, password1);
-        viewModel.register(user).observe(this, success -> {
-                showToast("Registro exitoso");
-        });*/
+        User user = new User(usuario, email, password1);
+        viewModel.register(user);
     }
 
     private void showToast (String message) {
         Toast.makeText(RegisterActivity.this, message, Toast.LENGTH_SHORT).show();
-        finish();
     }
 }

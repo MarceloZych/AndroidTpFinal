@@ -1,4 +1,4 @@
 package com.example.proyectointegrador.viewmodel;
 
-public class AuthViewModel {
+public class ImageViewModel {
 }

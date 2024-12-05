@@ -55,7 +55,7 @@
                 app:boxBackgroundColorMode="none">
 
                 <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/etUsuario"
+                    android:id="@+id/tietUsuario"
                     style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
