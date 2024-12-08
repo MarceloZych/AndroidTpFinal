@@ -1,10 +1,5 @@
 package com.example.proyectointegrador.view;
 
-/*import android.os.Bundle;
-import android.util.Log;
-import android.view.View;
-import android.widget.Toast;*/
-
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Intent;
@@ -12,15 +7,20 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Toast;
 
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.GridLayoutManager;
 
-import com.example.proyectointegrador.Manifest;
+import android.Manifest;
+
+import com.example.proyectointegrador.R;
 import com.example.proyectointegrador.adapters.ImageAdapter;
 import com.example.proyectointegrador.databinding.ActivityPostBinding;
 import com.example.proyectointegrador.model.Post;
@@ -30,13 +30,6 @@ import com.example.proyectointegrador.util.Validaciones;
 
 import java.util.ArrayList;
 import java.util.List;
-/*import androidx.lifecycle.Observer;
-import androidx.lifecycle.ViewModelProvider;
-
-import com.example.proyectointegrador.R;
-import com.example.proyectointegrador.databinding.ActivityUserBinding;
-import com.example.proyectointegrador.model.User;
-import com.example.proyectointegrador.viewmodel.PostViewModel;*/
 
 public class PostActivity extends AppCompatActivity {
     private static final int MAX_IMAGE = 3;
@@ -55,9 +48,9 @@ public class PostActivity extends AppCompatActivity {
         setContentView(binding.getRoot());
         setupRecyclerView();
         setupViewModel();
-        //setupCategorySpinner();
+        setupCategorySpinner();
         setupGalleryLauncher();
-        binding.btPublicar.setOnClickListener(v -> publicarPost());
+        binding.publicar.setOnClickListener(v -> publicarPost());
     }
 
     private void setupRecyclerView() {
@@ -70,22 +63,42 @@ public class PostActivity extends AppCompatActivity {
     private void setupViewModel() {
         postViewModel = new ViewModelProvider(this).get(PostViewModel.class);
         postViewModel.getPostSuccess().observe(this, success -> {
-           String message = success ? "Publicación exitosa" : "Error al publicar";
+           String message = success ?"Publicación exitosa" : "Error al publicar";
            Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
            if (success) finish();
         });
     }
+
+    private void setupCategorySpinner() {
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(
+                this, R.layout.spinner_item, getResources().getStringArray(R.array.categorias_array)
+        );
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        binding.spinner.setAdapter(adapter);
+        binding.spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                categoria = (String) parent.getItemAtPosition(position);
+            }
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+                categoria = null;
+            }
+        });
+    }
+
     @SuppressLint("NotifyDataSetChanged")
     private void setupGalleryLauncher() {
         galleryLauncher = registerForActivityResult(
-                new ActivityResultContracts.GetMultipleContents(),
+                new ActivityResultContracts.StartActivityForResult(),
                 result -> {
                     if (result.getResultCode() == Activity.RESULT_OK && result.getData() != null) {
-                        Uri imageUri = result.getData();
+                        Uri imageUri = result.getData().getData();
                         if (imageUri != null && imagenesUrls.size() < MAX_IMAGE) {
-                            ImageUtils.subirImagenParse(PostActivity.this, imageUri, new ImageUtils.OnImageUploadedListener() {
+                            ImageUtils.subirImagenParse(PostActivity.this, imageUri, new ImageUtils.ImageUploadCallback() {
                                 @Override
                                 public void onSuccess(String imageUrl) {
+                                    Log.d("PostActivity", "Imagen subida con éxito: " + imageUrl);
                                     imagenesUrls.add(imageUrl);
                                     adapter.notifyDataSetChanged();
                                     updateRecyclerViewVisibility();
@@ -102,8 +115,7 @@ public class PostActivity extends AppCompatActivity {
                     }
                 }
         );
-        binding.btAgregarImagen.setOnClickListener(v -> {
-            Log.d("PostActivity", "Botón de agregar imagen clickeado");
+        binding.uploadImage.setOnClickListener(v -> {
             ImageUtils.pedirPermisos(PostActivity.this, new String[]{
                     Manifest.permission.READ_EXTERNAL_STORAGE
             },
@@ -112,29 +124,29 @@ public class PostActivity extends AppCompatActivity {
     }
 
     private void publicarPost() {
-        String titulo = binding.etTitulo.getText().toString().trim();
-        String descripcion = binding.etDescripcion.getText().toString().trim();
-        String duracionStr = binding.etDuracion.getText().toString().trim();
-        String presupuestoStr = binding.etPresupuesto.getText().toString().trim();
+        String titulo = binding.tituloPost.getText().toString().trim();
+        String descripcion = binding.descripcion.getText().toString().trim();
+        String duracionStr = binding.duracion.getText().toString().trim();
+        String presupuestoStr = binding.presupuesto.getText().toString().trim();
 
         if (!Validaciones.validarTexto(titulo)) {
-            binding.etTitulo.setError("El título no es válido");
+            binding.tituloPost.setError("El título no es válido");
             return;
         }
         if (!Validaciones.validarTexto(descripcion)) {
-            binding.etDescripcion.setError("La descripción no es válida");
+            binding.descripcion.setError("La descripción no es válida");
             return;
         }
-        int duracion = Validaciones.validarDuracion(duracionStr);
+        int duracion = Validaciones.validarNumero(duracionStr);
         if (duracion == 1) {
-            binding.etDuracion.setError("Duración no válida");
+            binding.duracion.setError("Duración no válida");
             return;
         }
         double presupuesto;
         try {
             presupuesto = Double.parseDouble(presupuestoStr);
         } catch (NumberFormatException e) {
-            binding.etPresupuesto.setError("Presupuesto no válido");
+            binding.presupuesto.setError("Presupuesto no válido");
             return;
         }
 
@@ -145,99 +157,19 @@ public class PostActivity extends AppCompatActivity {
     private void updateRecyclerViewVisibility() {
         boolean hasImages = !imagenesUrls.isEmpty();
         binding.recyclerView.setVisibility(hasImages ? View.VISIBLE : View.GONE);
-        binding.btAgregarImagen.setVisibility(imagenesUrls.size() < MAX_IMAGE ? View.VISIBLE : View.GONE);
-    }
-}
-
-
-
-
-   /* private ActivityUserBinding binding;
-    private PostViewModel viewModel;
-
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        binding = ActivityUserBinding.inflate(getLayoutInflater());
-        setContentView(R.layout.activity_post);
-        viewModel = new ViewModelProvider(this).get(PostViewModel.class);
-        esperandoObservers();
-        manejarEventos();
+        binding.uploadImage.setVisibility(imagenesUrls.size() < MAX_IMAGE ? View.VISIBLE : View.GONE);
     }
 
-    private void esperandoObservers() {
-        viewModel.getOperationStatus().observe(this, new Observer<String>() {
-            @Override
-            public void onChanged(String status) {
-                Toast.makeText(PostActivity.this, status, Toast.LENGTH_SHORT).show();
-                limpiar();
-            }
-        });
-        viewModel.getCurrentUser().observe(this, new Observer<User>() {
-            @Override
-            public void onChanged(User user) {
-                if (user != null) mostrarUsuario(user);
-            }
-        });
+  /*  @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull ll String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        Log.d("PostActivity", "onRequestPermissionsResult ejecutado");
+        if (requestCode == REQUEST_IMAGE && grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+            Log.d("PostActivity", "Permiso concedido, abriendo galería");
+            ImageUtils.openGallery(PostActivity.this, galleryLauncher);
+        } else {
+            Log.d("PostActivity", "Permiso denegado");
+            Toast.makeText(this, "Permiso denegado", Toast.LENGTH_SHORT).show();
         }
-
-
-    private void manejarEventos() {
-        binding.btCreateUser.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                User user = obtenerDatosUsuario();
-                viewModel.createUser(usuario, PostActivity.this);
-            }
-        });
-        binding.btUpdateUser.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                User user = obtenerDatosUsuario();
-                viewModel.updateUser(user, PostActivity.this);
-            }
-        });
-        binding.btDeleteUser.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                String id = binding.etId.getText().toString().trim();
-                viewModel.deleteUser(id, PostActivity.this);
-            }
-        });
-        binding.btReadUser.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                String email = binding.etMail.getText().toString().trim();
-                viewModel.getUser(email, PostActivity.this);
-            }
-        });
-        binding.circuloBlack.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                finish();
-            }
-        });
-    }
-
-    private User obtenerDatosUsuario() {
-        String username = binding.etUsuario.getText().toString().trim();
-        String email = binding.etMail.getText().toString().trim();
-        String id = binding.etId.getText().toString().trim();
-        String password = binding.etPassword1.getText().toString().trim();
-        return new User(username, email, id, password);
-    }
-
-    private void mostrarUsuario(User user) {
-        binding.etUsuario.getText().toString().trim();
-        binding.etMail.getText().toString().trim();
-        binding.etId.getText().toString().trim();
-        binding.etPassword1.getText().toString().trim();
-        Log.d("mostrar", user.getId() +"-"+ user.getUsername());
-    }
-
-    private void limpiar() {
-        binding.etUsuario.setText("");
-        binding.etMail.setText("");
-        binding.etId.setText("");
-        binding.etPassword1.setText("");
     }*/
+}

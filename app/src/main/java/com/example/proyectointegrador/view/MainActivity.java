@@ -42,7 +42,7 @@ public class MainActivity extends AppCompatActivity {
         binding.btLogin.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v) {
-                String email = binding.etUsuario.getText().toString().trim();
+                String email = binding.tietUsuario.getText().toString().trim();
                 String password = binding.etPassword.getText().toString().trim();
 
                 if(!Validaciones.validarCorreo(email))
@@ -81,7 +81,7 @@ public class MainActivity extends AppCompatActivity {
     }
     private void limpiarCampos()
     {
-        binding.etUsuario.setText("");
+        binding.tietUsuario.setText("");
         binding.etPassword.setText("");
     }
 

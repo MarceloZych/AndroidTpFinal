@@ -6,17 +6,15 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Build;
 import android.provider.MediaStore;
-
+import android.Manifest;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.core.app.ActivityCompat;
 
-import com.example.proyectointegrador.Manifest;
 import com.parse.ParseException;
 import com.parse.ParseFile;
 import com.parse.SaveCallback;
 
 import java.io.ByteArrayOutputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 

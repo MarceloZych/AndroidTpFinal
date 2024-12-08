@@ -15,6 +15,10 @@ import com.parse.Parse;
 import com.parse.ParseUser;
 
 public class AuthProvider {
+
+    public AuthProvider() {
+    }
+
     public AuthProvider(Context context)
     {
         Parse.initialize(new Parse.Configuration.Builder(context)

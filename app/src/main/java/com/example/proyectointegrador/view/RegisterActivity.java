@@ -5,6 +5,7 @@ import android.widget.Toast;
 import android.view.View;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.example.proyectointegrador.databinding.ActivityRegisterBinding;
