@@ -1,117 +1,48 @@
-package com.example.proyectointegrador.viewmodel;
+package com.example.proyectointegrador.viewmodel; // Paquete donde se encuentra la clase
 
-import android.util.Log;
+import android.util.Log; // Importa Log para registrar mensajes en el Logcat
 
-import androidx.lifecycle.LifecycleOwner;
-import androidx.lifecycle.LiveData;
-import androidx.lifecycle.MutableLiveData;
-import androidx.lifecycle.Observer;
-import androidx.lifecycle.ViewModel;
+import androidx.lifecycle.LiveData; // Importa LiveData para observar datos que pueden cambiar
+import androidx.lifecycle.MutableLiveData; // Importa MutableLiveData para datos que pueden ser modificados
+import androidx.lifecycle.ViewModel; // Importa ViewModel para crear un modelo de datos que sobreviva a cambios de configuración
 
-import com.example.proyectointegrador.model.Post;
-import com.example.proyectointegrador.model.User;
-import com.example.proyectointegrador.providers.AuthProvider;
-import com.example.proyectointegrador.providers.PostProvider;
+import com.example.proyectointegrador.model.Post; // Importa el modelo Post
+import com.example.proyectointegrador.providers.PostProvider; // Importa PostProvider para manejar operaciones relacionadas con los posts
+import com.parse.ParseObject; // Importa ParseObject para trabajar con objetos en Parse
 
-import java.util.List;
+import java.util.List; // Importa List para trabajar con colecciones
 
+// Clase que representa el ViewModel para manejar operaciones relacionadas con los posts
 public class PostViewModel extends ViewModel {
 
-    private final MutableLiveData<Boolean> postSuccess = new MutableLiveData<>();
-    private final PostProvider postProvider;
-    private LiveData<List<Post>> posts;
+    private final MutableLiveData<String> postSuccess = new MutableLiveData<>(); // LiveData que indica si la publicación fue exitosa
+    private final PostProvider postProvider; // Proveedor que maneja operaciones relacionadas con los posts
+    private LiveData<List<Post>> posts; // LiveData que contiene una lista de posts
+    private final MutableLiveData<List<ParseObject>> commentsLiveData = new MutableLiveData<>(); // LiveData que contiene una lista de comentarios
+    private final MutableLiveData<String> errorMessage = new MutableLiveData<>(); // LiveData que contiene mensajes de error
 
-    public LiveData<Boolean> getPostSuccess() { return postSuccess; }
-
-    public PostViewModel() {
-        posts = new MutableLiveData<>();
-        postProvider = new PostProvider();
+    // Método público que devuelve el LiveData de éxito al publicar un post
+    public LiveData<String> getPostSuccess() {
+        return postSuccess;
     }
 
+    // Constructor del ViewModel
+    public PostViewModel() {
+        posts = new MutableLiveData<>(); // Inicializa el LiveData para la lista de posts
+        postProvider = new PostProvider(); // Crea una nueva instancia del PostProvider
+    }
+
+    // Método público para publicar un nuevo post
     public void publicar(Post post) {
-        postProvider.addPost(post)
-                .observeForever(result -> {
-                    if ("Post publicado".equals(result)) {
-                        postSuccess.setValue(true);
-                    } else {
-                        postSuccess.setValue(false);
-                    }
+        postProvider.addPost(post) // Llama al método addPost en el PostProvider para agregar el post
+                .observeForever(result -> { // Observa el resultado de la operación de publicación
+                    postSuccess.setValue(result); // Establece el resultado en postSuccess, notificando a los observadores
                 });
     }
 
+    // Método público para obtener todos los posts disponibles
     public LiveData<List<Post>> getPosts() {
-        posts = postProvider.getPostsByCurrentUser();
-        Log.d("PostViewModel", "Posts: ");
-        return posts;
+        posts = postProvider.getAllPosts(); // Llama al método getAllPosts en el PostProvider y asigna el resultado a posts
+        return posts; // Devuelve la lista de posts observables
     }
-
-
-
-
-/*    private final AuthProvider authProvider;
-    private final PostProvider userProvider;
-    private final MutableLiveData<User> currentUser;
-    private final MutableLiveData<String> estado;
-
-    public PostViewModel() {
-        authProvider = new AuthProvider();
-        userProvider = new PostProvider();
-        currentUser = new MutableLiveData<>();
-        estado = new MutableLiveData<>();;
-    }
-
-    public LiveData<User> getCurrentUser() { return currentUser; }
-    public LiveData<String> getOperationStatus() { return estado; }
-
-    public void createUser(User user, LifecycleOwner lifecycleOwner) {
-        authProvider.signUp(user.getEmail(), user.getPassword()).observe(lifecycleOwner, uid -> {
-            if (uid != null) {
-                user.setId(uid);
-                userProvider.createUser(user).observe(lifecycleOwner, status -> {
-                    if (status != null) {
-                        estado.setValue(status);
-                    } else {
-                        estado.setValue("Error al crear el usuario");
-                    }
-                });
-            } else {
-                estado.setValue("Error al registrar el usuario");
-            }
-        });
-    }
-
-    public void updateUser(User user, LifecycleOwner lifecycleOwner) {
-        LiveData<String> result = userProvider.updateUser(user);
-        result.observe(lifecycleOwner, new Observer<String>() {
-            @Override
-            public void onChanged(String s) {
-                estado.setValue(result.getValue());
-            }
-        });
-    }
-
-    public void deleteUser(String id, LifecycleOwner lifecycleOwner) {
-        LiveData<String> result = userProvider.deleteUser(id);
-        result.observe(lifecycleOwner, new Observer<String>() {
-            @Override
-            public void onChanged(String s) {
-                estado.setValue(s);
-            }
-        });
-    }
-
-    public void getUser(String email, LifecycleOwner lifecycleOwner) {
-        LiveData<User> user = userProvider.getUser(email);
-        user.observe(lifecycleOwner, new Observer<User>() {
-            @Override
-            public void onChanged(User foundUser) {
-                if (foundUser != null) {
-                    Log.d("User info", "ID: " + foundUser.getId() + ", Usuario: " + foundUser.getUsername());
-                    currentUser.setValue(foundUser);
-                } else {
-                    estado.setValue("Usuario no encontrado");
-                }
-            }
-        });
-    }*/
 }

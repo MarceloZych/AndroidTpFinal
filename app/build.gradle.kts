@@ -43,6 +43,7 @@ dependencies {
 
     // Para manejar imágenes
     implementation(libs.picasso) // Biblioteca de manejo de imágenes
+    implementation("com.github.bumptech.glide:glide:4.16.0")
 
     // Circle Image View
     implementation(libs.circleimageview) // Biblioteca de vista de imagen circular

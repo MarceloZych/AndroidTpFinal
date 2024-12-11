@@ -11,10 +11,11 @@ import com.example.proyectointegrador.providers.AuthProvider;
 public class MainViewModel extends ViewModel {
     public final AuthProvider authProvider;
 
-    public MainViewModel( Context context ) { authProvider = new AuthProvider(context); }
+    public MainViewModel() {
+        authProvider = new AuthProvider();
+    }
 
-    public LiveData<String> login(String email, String password)
-    {
+    public LiveData<String> login(String email, String password) {
         MutableLiveData<String> loginResult = new MutableLiveData<>();
         authProvider.signIn(email, password).observeForever(user_id -> {
             loginResult.setValue(user_id);

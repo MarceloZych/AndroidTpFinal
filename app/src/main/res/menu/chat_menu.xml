@@ -1,8 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<menu xmlns:android="http://schemas.android.com/apk/res/android">
-    <item
-        android:id="@+id/itemChats"
-        android:title="Mi Opción"
-        android:icon="@drawable/ic_home"
-        app:showAsAction="ifRoom" />
-</menu>

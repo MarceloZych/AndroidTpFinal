@@ -30,17 +30,16 @@
         android:layout_height="match_parent"
         app:layout_behavior="@string/appbar_scrolling_view_behavior"
         />
+
     <ImageView
         android:id="@+id/fab"
-        android:layout_width="50dp"
-        android:layout_height="50dp"
-        android:src="@drawable/ic_add"
-        android:background="@drawable/circular_backg_lavanada"
-        android:scaleType="centerCrop"
-        android:layout_margin="30dp"
+        android:layout_width="77dp"
+        android:layout_height="65dp"
         android:layout_gravity="end|bottom"
+        android:layout_margin="30dp"
+        android:background="@drawable/circular_backg_lavanada"
         android:padding="7dp"
-        />
-
+        android:scaleType="centerCrop"
+        android:src="@drawable/ic_add" />
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

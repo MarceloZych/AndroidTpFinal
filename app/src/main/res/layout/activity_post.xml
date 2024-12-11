@@ -35,7 +35,7 @@
 
             <!-- Toolbar que contiene el título y el botón de acción -->
             <androidx.appcompat.widget.Toolbar
-                android:id="@+id/toolbar"
+                android:id="@+id/toolbar_filtro"
                 android:layout_width="match_parent"
                 android:layout_height="?attr/actionBarSize"
                 app:layout_collapseMode="pin" />

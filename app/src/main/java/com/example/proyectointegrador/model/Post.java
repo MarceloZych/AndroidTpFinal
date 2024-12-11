@@ -1,75 +1,45 @@
 package com.example.proyectointegrador.model;
 
+import android.os.Bundle;
+
+import com.parse.ParseClassName;
+import com.parse.ParseObject;
+
+import java.util.ArrayList;
 import java.util.List;
 
-public class Post {
-    private String titulo, descripcion, categoria;
-    private int duracion;
-    private double presupuesto;
-    private List<String> imagenes;
+@ParseClassName("Post")
+public class Post extends ParseObject {
+    public String getId() { return getObjectId(); }
+    public String getTitulo() { return getString("titulo"); }
+    public void setTitulo(String titulo) { put("titulo", titulo); }
+    public String getDescripcion() { return getString("descripcion"); }
+    public void setDescripcion(String descripcion) { put("descripcion", descripcion); }
+    public int getDuracion() { return getInt("duracion"); }
+    public void setDuracion(int duracion) { put("duracion", duracion); }
+    public String getCategoria() { return getString("categoria"); }
+    public void setCategoria(String categoria) { put("categoria", categoria); }
+    public double getPresupuesto() { return getDouble("presupuesto"); }
+    public void setPresupuesto(double presupuesto) { put("presupuesto", presupuesto); }
+    public List<String> getImagenes() { return getList("imagenes"); }
+    public void setImagenes(List<String> imagenes) { put("imagenes", imagenes); }
+    public User getUser() { return (User)getParseObject("user");}
+    public void setUser(User user) { put("user", user); }
+    public Bundle toBundle() {
+        Bundle bundle = new Bundle();
+        bundle.putString("titulo", getTitulo());
+        bundle.putString("descripcion", getDescripcion());
+        bundle.putString("categoria", getCategoria());
+        bundle.putInt("duracion", getDuracion());
+        bundle.putDouble("presupuesto", getPresupuesto());
 
-    public Post(String titulo, String descripcion, String categoria, int duracion, double presupuesto) {
-        this.titulo = titulo;
-        this.descripcion = descripcion;
-        this.categoria = categoria;
-        this.duracion = duracion;
-        this.presupuesto = presupuesto;
-    }
-
-    public Post(String titulo, String descripcion, String categoria, int duracion, double presupuesto, List<String> imagenes) {
-        this.titulo = titulo;
-        this.descripcion = descripcion;
-        this.categoria = categoria;
-        this.duracion = duracion;
-        this.presupuesto = presupuesto;
-        this.imagenes = imagenes;
-    }
-
-    public String getTitulo() {
-        return titulo;
-    }
-
-    public void setTitulo(String titulo) {
-        this.titulo = titulo;
-    }
-
-    public String getDescripcion() {
-        return descripcion;
-    }
-
-    public void setDescripcion(String descripcion) {
-        this.descripcion = descripcion;
-    }
-
-    public String getCategoria() {
-        return categoria;
-    }
-
-    public void setCategoria(String categoria) {
-        this.categoria = categoria;
-    }
-
-    public int getDuracion() {
-        return duracion;
-    }
-
-    public void setDuracion(int duracion) {
-        this.duracion = duracion;
-    }
-
-    public double getPresupuesto() {
-        return presupuesto;
-    }
-
-    public void setPresupuesto(double presupuesto) {
-        this.presupuesto = presupuesto;
-    }
-
-    public List<String> getImagenes() {
-        return imagenes;
-    }
-
-    public void setImagenes(List<String> imagenes) {
-        this.imagenes = imagenes;
+        User user = getUser();
+        if (user != null) {
+            bundle.putString("username", user.getUsername());
+            bundle.putString("email", user.getEmail());
+            bundle.putString("fotoDePerfil", user.getString("foto_perfil"));
+        }
+        bundle.putStringArrayList("imagenes", new ArrayList<String>(getImagenes()));
+        return bundle;
     }
 }
