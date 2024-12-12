@@ -24,13 +24,7 @@
             android:name=".view.PostDetailActivity"
             android:exported="false" />
         <activity
-            android:name=".view.fragments.UserActivity"
-            android:exported="false" />
-        <activity
             android:name=".view.HomeActivity"
-            android:exported="false" />
-        <activity
-            android:name=".view.MainActivity$HomeActivity"
             android:exported="false" />
         <activity
             android:name=".view.PostActivity"

@@ -31,7 +31,7 @@
                     android:layout_gravity="center_horizontal|bottom"
                     android:layout_marginBottom="20dp"
                     android:src="@drawable/ic_person"
-                    app:civ_circle_background_color="@color/colorGray"
+                    app:civ_circle_background_color="@color/black"
                     app:civ_border_color="@color/white"
                     app:civ_border_width="5dp" />
             </FrameLayout>
@@ -50,7 +50,7 @@
                     android:id="@+id/nameUser"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/redsocial"
+                    android:text="Red Social"
                     android:textColor="@color/white"
                     android:textStyle="bold"
                     android:textSize="12sp" />
@@ -59,7 +59,7 @@
                     android:id="@+id/emailUser"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/redsocial"
+                    android:text="Red Social"
                     android:textColor="@color/white"
                     android:textSize="11sp"
                     android:textStyle="bold"
@@ -68,13 +68,11 @@
                     android:id="@+id/insta"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/redsocial"
+                    android:text="Red Social"
                     android:textColor="@color/white"
                     android:textSize="11sp"
                     android:textStyle="bold"
                     tools:ignore="TextSizeCheck" />
-
-
             </LinearLayout>
         </com.google.android.material.appbar.CollapsingToolbarLayout>
     </com.google.android.material.appbar.AppBarLayout>
@@ -84,7 +82,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         app:layout_behavior="@string/appbar_scrolling_view_behavior"
-        android:padding="@dimen/default_padding">
+        android:padding="16dp">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -110,7 +108,7 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:layout_marginTop="5dp"
-                    app:tabIndicatorColor="@color/purple_500"
+                    app:tabIndicatorColor="@color/mustard"
                     app:tabIndicatorHeight="4dp" />
             </LinearLayout>
             <!-- Post Details -->
@@ -118,7 +116,7 @@
                 android:id="@+id/lugar"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textColor="@color/colorGray"
+                android:textColor="@color/black"
                 android:textSize="14sp"
                 android:textStyle="bold"
                 android:layout_marginBottom="8dp" />
@@ -127,7 +125,7 @@
                 android:id="@+id/categoria"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textColor="@color/colorGray"
+                android:textColor="@color/black"
                 android:textSize="14sp"
                 android:textStyle="bold"
                 android:layout_marginBottom="8dp" />
@@ -136,7 +134,7 @@
                 android:id="@+id/description"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textColor="@color/colorGray"
+                android:textColor="@color/black"
                 android:textSize="14sp"
                 android:layout_marginBottom="8dp" />
 
@@ -144,7 +142,7 @@
                 android:id="@+id/duracion"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textColor="@color/colorGray"
+                android:textColor="@color/black"
                 android:textSize="14sp"
                 android:layout_marginBottom="8dp" />
 
@@ -152,7 +150,7 @@
                 android:id="@+id/presupuesto"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textColor="@color/colorGray"
+                android:textColor="@color/black"
                 android:textSize="14sp"
                 android:layout_marginBottom="8dp" />
         </LinearLayout>
@@ -166,6 +164,6 @@
         android:layout_gravity="end|center_horizontal"
         android:layout_margin="36dp"
         android:src="@drawable/ic_chat"
-        app:contentDescription="@string/comienzaUnChat" />
+        app:contentDescription="Comienza Un Chat" />
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
 

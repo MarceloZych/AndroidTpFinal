@@ -5,7 +5,7 @@ import android.util.Log;
 import com.parse.ParseClassName;
 import com.parse.ParseObject;
 
-@ParseClassName("User")
+@ParseClassName("_User")
 public class User extends ParseObject {
     public User() {
     }

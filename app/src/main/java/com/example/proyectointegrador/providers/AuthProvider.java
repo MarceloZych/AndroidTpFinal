@@ -1,17 +1,11 @@
 package com.example.proyectointegrador.providers; // Paquete donde se encuentra la clase
 
-import static com.parse.Parse.getApplicationContext; // Importa el contexto de la aplicación
-
-import android.content.Context; // Importa Context para acceder a recursos y servicios de la aplicación
 import android.util.Log; // Importa Log para registrar mensajes en el Logcat
 
 import androidx.lifecycle.LiveData; // Importa LiveData para observar datos que pueden cambiar
 import androidx.lifecycle.MutableLiveData; // Importa MutableLiveData para datos que pueden ser modificados
 
-import com.example.proyectointegrador.R; // Importa los recursos del proyecto
 import com.example.proyectointegrador.model.User; // Importa el modelo User
-import com.parse.LogInCallback; // Importa LogInCallback para manejar resultados de inicio de sesión
-import com.parse.Parse; // Importa Parse para inicializar y configurar Parse
 import com.parse.ParseUser; // Importa ParseUser para trabajar con usuarios de Parse
 
 // Clase que proporciona métodos para manejar la autenticación de usuarios
@@ -20,18 +14,6 @@ public class AuthProvider {
     // Constructor por defecto
     public AuthProvider() {
     }
-
-    /*
-    // Constructor que inicializa Parse con la configuración necesaria
-    public AuthProvider(Context context) {
-        Parse.initialize(new Parse.Configuration.Builder(context)
-                .applicationId(context.getString(R.string.back4app_app_id)) // ID de la aplicación
-                .clientKey(context.getString(R.string.back4app_client_key)) // Clave del cliente
-                .server(context.getString(R.string.back4app_server_url)) // URL del servidor
-                .build()
-        );
-    }
-    */
 
     // Método para iniciar sesión con email y contraseña
     public LiveData<String> signIn(String email, String password) {
