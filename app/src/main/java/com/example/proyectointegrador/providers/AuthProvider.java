@@ -1,6 +1,7 @@
 package com.example.proyectointegrador.providers; // Paquete donde se encuentra la clase
 
 import android.util.Log; // Importa Log para registrar mensajes en el Logcat
+import android.widget.Toast;
 
 import androidx.lifecycle.LiveData; // Importa LiveData para observar datos que pueden cambiar
 import androidx.lifecycle.MutableLiveData; // Importa MutableLiveData para datos que pueden ser modificados

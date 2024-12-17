@@ -11,35 +11,30 @@
     <com.google.android.material.appbar.AppBarLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:theme="@style/ThemeOverlay.AppCompat.ActionBar"
-        >
+        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
+
         <androidx.appcompat.widget.Toolbar
             android:id="@+id/tools"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
             android:background="@drawable/headerbkg"
             app:title="Publicaciones"
-            app:titleTextColor="@color/white"
-            >
-        </androidx.appcompat.widget.Toolbar>
+            app:titleTextColor="@android:color/white" />
     </com.google.android.material.appbar.AppBarLayout>
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior"
-        />
-
+        app:layout_behavior="@string/appbar_scrolling_view_behavior" />
     <ImageView
         android:id="@+id/fab"
-        android:layout_width="77dp"
-        android:layout_height="65dp"
-        android:layout_gravity="end|bottom"
-        android:layout_margin="30dp"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:src="@drawable/ic_add"
         android:background="@drawable/circular_backg_lavanada"
-        android:padding="7dp"
         android:scaleType="centerCrop"
-        android:src="@drawable/ic_add" />
-
+        android:layout_margin="30dp"
+        android:layout_gravity="end|bottom"
+        android:padding="7dp"/>
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

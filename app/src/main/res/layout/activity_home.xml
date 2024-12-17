@@ -18,7 +18,6 @@
         android:id="@+id/main_cont"
         android:layout_width="match_parent"
         android:layout_height="176dp"
-        android:layout_marginBottom="555dp"
         android:gravity="center"
         android:orientation="vertical"
         android:padding="16dp"

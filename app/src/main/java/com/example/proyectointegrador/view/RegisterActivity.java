@@ -28,7 +28,7 @@ public class RegisterActivity extends AppCompatActivity {
 
         viewModel = new ViewModelProvider(this).get(RegisterViewModel.class); // Obtiene una instancia del ViewModel
 
-        viewModel.getRegisterResult().observe(this, result -> showToast(result)); // Observa el resultado del registro y muestra un Toast con el mensaje correspondiente
+        viewModel.getRegisterResult().observe(this, this::showToast); // Observa el resultado del registro y muestra un Toast con el mensaje correspondiente
 
         manejarEventos(); // Configura los eventos de los elementos interactivos en la interfaz
     }
@@ -55,7 +55,7 @@ public class RegisterActivity extends AppCompatActivity {
         String password1 = binding.etPassword1.getText().toString().trim();  // Obtiene y limpia el texto del primer campo de contraseña
         String password2 = binding.etPassword2.getText().toString().trim();  // Obtiene y limpia el texto del segundo campo de contraseña
 
-        if (!Validaciones.validarUsuario(usuario)) {  // Valida si el nombre de usuario es correcto
+        /*if (!Validaciones.validarUsuario(usuario)) {  // Valida si el nombre de usuario es correcto
             showToast("Usuario incorrecto");  // Muestra un mensaje si no es válido
             return;
         }
@@ -69,13 +69,13 @@ public class RegisterActivity extends AppCompatActivity {
         if (passError != null) {
             showToast(passError);  // Muestra un mensaje con el error si hay problemas con las contraseñas
             return;
-        }
+        }*/
 
         User user = new User();  // Crea una nueva instancia del modelo User
-        user.setRedSocial(email);  // Establece el correo electrónico como red social del usuario
+        user.setEmail(email);  // Establece el correo electrónico como red social del usuario
         user.setUsername(usuario);  // Establece el nombre de usuario
         user.setPassword(password1);  // Establece la contraseña
-
+        Log.d("RegisterActivity", "Correo electrónico ingresado: " + user.getEmail());
         Log.d("RegisterActivity", "Usuario registrado: " + usuario + ", Email: " + email + ", Password: " + password1);
         viewModel.register(user);  // Llama al método register en el ViewModel con la información del nuevo usuario
     }
@@ -83,7 +83,7 @@ public class RegisterActivity extends AppCompatActivity {
     // Método privado que muestra un Toast con un mensaje específico
     private void showToast(String message) {
         if (message != null) { // Verifica que el mensaje no sea nulo
-            Toast.makeText(RegisterActivity.this, message, Toast.LENGTH_SHORT).show(); // Muestra un Toast con el mensaje proporcionado   
+            Toast.makeText(RegisterActivity.this, message, Toast.LENGTH_SHORT).show(); // Muestra un Toast con el mensaje proporcionado
         }
     }
 }

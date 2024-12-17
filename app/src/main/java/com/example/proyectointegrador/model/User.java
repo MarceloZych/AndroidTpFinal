@@ -5,7 +5,7 @@ import android.util.Log;
 import com.parse.ParseClassName;
 import com.parse.ParseObject;
 
-@ParseClassName("_User")
+@ParseClassName("User")
 public class User extends ParseObject {
     public User() {
     }
@@ -38,11 +38,11 @@ public class User extends ParseObject {
     }
 
     public void setEmail(String email) {
-        if (email != null) {
+        //if (email != null) {
             put("email", email);
-        } else {
+        /*} else {
             Log.w("User", "El correo electrónico es nulo.");
-        }
+        }*/
     }
 
     public String getPassword() {
