@@ -117,4 +117,12 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.PostViewHolder
             ivImage3 = itemView.findViewById(R.id.ivImage3);
         }
     }
+
+    public void updatePosts(List<Post> newPosts) {
+        if (newPosts != null) {
+            this.posts.clear();
+            this.posts.addAll(newPosts);
+            notifyDataSetChanged();
+        }
+    }
 }

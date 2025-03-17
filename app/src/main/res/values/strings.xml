@@ -15,4 +15,10 @@
     <string name="back4app_client_key">Z3xseeaPA2IDEdKOA7rOD7WUelC0rnHtPwu4h4gb</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="realizar_un_post">REALIZAR UN POST</string>
+    <string name="lugar_que_visitaste">LUGAR QUE VISITASTE</string>
+    <string name="describe_tu_experiencia">Describe tu experiencia...</string>
+    <string name="duraci_n_del_viaje_ej_3_d_as">Duración del viaje (ej. 3 días)</string>
+    <string name="presupuesto_estimado_usd_s">Presupuesto estimado (USD)s</string>
+    <string name="publicar">Publicar</string>
 </resources>

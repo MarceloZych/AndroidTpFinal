@@ -1,30 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- Layout principal de la actividad de publicación -->
-<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.coordinatorlayout.widget.CoordinatorLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/main"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context=".view.PostActivity">
-
-    <!-- AppBarLayout que contiene la barra de herramientas y el título -->
+    android:layout_height="match_parent">
+    <!-- AppBarLayout con CollapsingToolbarLayout -->
     <com.google.android.material.appbar.AppBarLayout
-        android:id="@+id/app_bar_layout"
         android:layout_width="match_parent"
         android:layout_height="250dp"
-        android:background="@drawable/headerbkg"
-        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
-
-        <!-- CollapsingToolbarLayout que contiene el título y la imagen de fondo -->
+        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
+        android:background="@drawable/headerbkg">
         <com.google.android.material.appbar.CollapsingToolbarLayout
-            android:id="@+id/collapsing_toolbar_layout"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            app:contentScrim="?attr/colorPrimary"
-            app:layout_scrollFlags="scroll|exitUntilCollapsed">
-
-            <!-- ImageView que muestra la imagen de fondo -->
+            app:layout_scrollFlags="scroll|exitUntilCollapsed"
+            app:contentScrim="?attr/colorPrimary">
             <ImageView
                 android:id="@+id/uploadImage"
                 android:layout_width="match_parent"
@@ -32,151 +22,118 @@
                 android:scaleType="centerCrop"
                 android:src="@drawable/uploadimg"
                 app:layout_collapseMode="parallax" />
-
-            <!-- Toolbar que contiene el título y el botón de acción -->
             <androidx.appcompat.widget.Toolbar
-                android:id="@+id/toolbar_filtro"
+                android:id="@+id/tools_filtro"
                 android:layout_width="match_parent"
                 android:layout_height="?attr/actionBarSize"
                 app:layout_collapseMode="pin" />
         </com.google.android.material.appbar.CollapsingToolbarLayout>
     </com.google.android.material.appbar.AppBarLayout>
-
-    <!-- NestedScrollView que contiene todo el contenido scrollable, incluyendo la imagen inferior -->
     <androidx.core.widget.NestedScrollView
-        android:id="@+id/nested_scroll_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:fillViewport="true"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior">
-
-        <!-- LinearLayout que envuelve todo el contenido scrollable -->
-        <LinearLayout
+        app:layout_behavior="@string/appbar_scrolling_view_behavior"
+        android:padding="16dp">
+        <androidx.cardview.widget.CardView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:padding="16dp">
-
-            <!-- CardView que contiene los campos de texto y el botón de publicación -->
-            <androidx.cardview.widget.CardView
-                android:id="@+id/card_view"
+            android:layout_marginTop="16dp"
+            app:cardCornerRadius="16dp"
+            app:cardElevation="8dp">
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
-                android:layout_marginBottom="50dp"
-                app:cardCornerRadius="16dp"
-                app:cardElevation="8dp">
-
-                <!-- LinearLayout que contiene los campos de texto y el botón de publicación -->
-                <LinearLayout
+                android:orientation="vertical"
+                android:padding="16dp">
+                <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    android:padding="16dp">
-
-                    <!-- TextView que muestra el título principal -->
-                    <TextView
-                        android:id="@+id/titulo_principal"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="Titulo"
-                        android:textAlignment="center"
-                        android:textColor="@color/mustard"
-                        android:textSize="24sp" />
-
-                    <!-- RecyclerView que muestra la lista de elementos (oculto por defecto) -->
-                    <androidx.recyclerview.widget.RecyclerView
-                        android:id="@+id/recycler_view"
-                        android:layout_width="match_parent"
-                        android:layout_height="150dp"
-                        android:layout_marginTop="8dp"
-                        android:background="@drawable/lavender_border"
-                        android:visibility="gone"
-                        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
-
-                    <!-- EditText que permite ingresar el título del post -->
-                    <EditText
-                        android:id="@+id/tituloPost"
-                        android:layout_width="match_parent"
-                        android:layout_height="50dp"
-                        android:layout_marginTop="8dp"
-                        android:background="@drawable/lavender_border"
-                        android:hint="Titulo Del Post"
-                        android:padding="16dp"
-                        android:textColor="@color/mustard"
-                        android:textSize="13sp" />
-
-                    <!-- EditText que permite ingresar la descripción del post -->
-                    <EditText
-                        android:id="@+id/descripcion"
-                        android:layout_width="match_parent"
-                        android:layout_height="80dp"
-                        android:layout_marginTop="8dp"
-                        android:background="@drawable/lavender_border"
-                        android:hint="Descripcion"
-                        android:padding="16dp"
-                        android:textColor="@color/mustard"
-                        android:textSize="13sp" />
-
-                    <!-- Spinner que permite seleccionar una opción -->
-                    <Spinner
-                        android:id="@+id/spinner"
-                        android:layout_width="match_parent"
-                        android:layout_height="50dp"
-                        android:layout_marginTop="8dp"
-                        android:background="@drawable/lavender_border" />
-
-                    <!-- EditText que permite ingresar la duración del post -->
-                    <EditText
-                        android:id="@+id/duracion"
-                        android:layout_width="match_parent"
-                        android:layout_height="50dp"
-                        android:layout_marginTop="10dp"
-                        android:background="@drawable/lavender_border"
-                        android:gravity="start|center_vertical"
-                        android:hint="Duracion"
-                        android:inputType="number"
-                        android:padding="16dp"
-                        android:textColor="@color/mustard"
-                        android:textSize="13sp" />
-
-                    <!-- EditText que permite ingresar el presupuesto del post -->
-                    <EditText
-                        android:id="@+id/presupuesto"
-                        android:layout_width="match_parent"
-                        android:layout_height="50dp"
-                        android:layout_marginTop="10dp"
-                        android:background="@drawable/lavender_border"
-                        android:gravity="start|center_vertical"
-                        android:hint="Presupuesto"
-                        android:inputType="numberDecimal"
-                        android:padding="16dp"
-                        android:textColor="@color/mustard"
-                        android:textSize="13sp" />
-
-                    <!-- Button que permite publicar el post -->
-                    <Button
-                        android:id="@+id/publicar"
-                        android:layout_width="match_parent"
-                        android:layout_height="60dp"
-                        android:layout_marginTop="16dp"
-                        android:text="Publicar"
-                        android:textSize="16sp" />
-                </LinearLayout>
-            </androidx.cardview.widget.CardView>
-
-            <!-- FrameLayout que contiene la imagen inferior -->
-            <FrameLayout
-                android:layout_width="match_parent"
-                android:layout_height="50dp"
-                android:layout_gravity="bottom">
-
-                <ImageView
+                    android:text="@string/realizar_un_post"
+                    android:textSize="24sp"
+                    android:textAlignment="center"
+                    android:textColor="@color/mustard" />
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/recyclerView"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:scaleType="centerCrop"
-                    android:src="@drawable/back_bottom" />
-            </FrameLayout>
-        </LinearLayout>
+                    android:layout_height="150dp"
+                    android:layout_marginTop="8dp"
+                    android:background="@drawable/lavender_border"
+                    android:visibility="gone"
+                    app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
+                <EditText
+                    android:id="@+id/itTitulo"
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:layout_marginTop="8dp"
+                    android:background="@drawable/lavender_border"
+                    android:hint="@string/lugar_que_visitaste"
+                    android:padding="16dp"
+                    android:textSize="13sp"
+                    android:textColor="@color/mustard" />
+                <EditText
+                    android:id="@+id/etDescripcion"
+                    android:layout_width="match_parent"
+                    android:layout_height="80dp"
+                    android:layout_marginTop="8dp"
+                    android:background="@drawable/lavender_border"
+                    android:hint="@string/describe_tu_experiencia"
+                    android:padding="16dp"
+                    android:textSize="13sp"
+                    android:textColor="@color/mustard" />
+                <Spinner
+                    android:id="@+id/spinnerCategoria"
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:layout_marginTop="8dp"
+                    android:background="@drawable/lavender_border" />
+                <EditText
+                    android:id="@+id/etDuracion"
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:background="@drawable/lavender_border"
+                    android:layout_marginTop="10dp"
+                    android:padding="16dp"
+                    android:hint="@string/duraci_n_del_viaje_ej_3_d_as"
+                    android:gravity="start|center_vertical"
+                    android:inputType="number"
+                    android:textColor="@color/mustard"
+                    android:textSize="13sp"/>
+                <EditText
+                    android:id="@+id/etPresupuesto"
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:hint="@string/presupuesto_estimado_usd_s"
+                    android:inputType="numberDecimal"
+                    android:background="@drawable/lavender_border"
+                    android:layout_marginTop="10dp"
+                    android:padding="16dp"
+                    android:gravity="start|center_vertical"
+                    android:textColor="@color/mustard"
+                    android:textSize="13sp"/>
+                <Button
+                    android:id="@+id/btnPublicar"
+                    android:layout_width="match_parent"
+                    android:layout_height="60dp"
+                    android:layout_marginTop="16dp"
+                    android:text="@string/publicar"
+                    android:textSize="16sp" />
+            </LinearLayout>
+        </androidx.cardview.widget.CardView>
     </androidx.core.widget.NestedScrollView>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:orientation="horizontal"
+        android:layout_gravity="bottom"
+        >
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:src="@drawable/back_bottom"
+            android:scaleType="centerCrop"
+            android:layout_gravity="end"
+            />
+    </LinearLayout>
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
+
+

@@ -59,7 +59,7 @@ public class PostActivity extends AppCompatActivity {
         setupCategorySpinner(); // Configura el spinner (selector) de categorías
         setupGalleryLauncher(); // Configura el launcher para abrir la galería al seleccionar imágenes
 
-        binding.publicar.setOnClickListener(v -> publicarPost()); // Configura el evento al hacer clic en el botón "Publicar"
+        binding.btnPublicar.setOnClickListener(v -> publicarPost()); // Configura el evento al hacer clic en el botón "Publicar"
     }
 
     private void setupRecyclerView() {
@@ -79,16 +79,14 @@ public class PostActivity extends AppCompatActivity {
         });
     }
 
-    private void setupCategorySpinner() {
+    private  void setupCategorySpinner() {
         ArrayAdapter<String> adapter = new ArrayAdapter<>(
                 this, R.layout.spinner_item, getResources().getStringArray(R.array.categorias_array)
         );  // Crea un ArrayAdapter con las categorías disponibles desde los recursos
 
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);  // Establece el layout del dropdown del spinner
-
-        binding.spinner.setAdapter(adapter);  // Establece el adaptador en el spinner
-
-        binding.spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+        binding.spinnerCategoria.setAdapter(adapter);  // Establece el adaptador en el spinner
+        binding.spinnerCategoria.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 categoria = (String) parent.getItemAtPosition(position);  // Almacena la categoría seleccionada
@@ -140,25 +138,25 @@ public class PostActivity extends AppCompatActivity {
     }
 
     private void publicarPost() {
-        String titulo = binding.tituloPost.getText().toString().trim();  // Obtiene y limpia el texto del título del post
-        String descripcion = binding.descripcion.getText().toString().trim();  // Obtiene y limpia el texto de descripción del post
-        String duracionStr = binding.duracion.getText().toString().trim();  // Obtiene y limpia el texto de duración del post
-        String presupuestoStr = binding.presupuesto.getText().toString().trim();  // Obtiene y limpia el texto del presupuesto
+        String titulo = binding.itTitulo.getText().toString().trim();  // Obtiene y limpia el texto del título del post
+        String descripcion = binding.etDescripcion.getText().toString().trim();  // Obtiene y limpia el texto de descripción del post
+        String duracionStr = binding.etDuracion.getText().toString().trim();  // Obtiene y limpia el texto de duración del post
+        String presupuestoStr = binding.etPresupuesto.getText().toString().trim();  // Obtiene y limpia el texto del presupuesto
 
         if (!Validaciones.validarTexto(titulo)) {
-            binding.tituloPost.setError("El título no es válido");  // Muestra un error si el título no es válido
+            binding.itTitulo.setError("El título no es válido");  // Muestra un error si el título no es válido
             return;
         }
 
         if (!Validaciones.validarTexto(descripcion)) {
-            binding.descripcion.setError("La descripción no es válida");  // Muestra un error si la descripción no es válida
+            binding.etDescripcion.setError("La descripción no es válida");  // Muestra un error si la descripción no es válida
             return;
         }
 
         int duracion = Validaciones.validarNumero(duracionStr);  // Valida y obtiene duración como número entero
 
         if (duracion == -1) {
-            binding.duracion.setError("Duración no válida");  // Muestra un error si la duración no es válida
+            binding.etDuracion.setError("Duración no válida");  // Muestra un error si la duración no es válida
             return;
         }
 
@@ -167,7 +165,7 @@ public class PostActivity extends AppCompatActivity {
         try {
             presupuesto = Double.parseDouble(presupuestoStr);  // Intenta convertir presupuesto a double
         } catch (NumberFormatException e) {
-            binding.presupuesto.setError("Presupuesto no válido");  // Muestra un error si no se puede convertir a número válido
+            binding.etPresupuesto.setError("Presupuesto no válido");  // Muestra un error si no se puede convertir a número válido
             return;
         }
 

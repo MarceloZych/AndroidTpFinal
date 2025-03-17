@@ -69,7 +69,7 @@ public class HomeFragment extends Fragment {
 
         postViewModel.getPosts().observe(getViewLifecycleOwner(), posts -> {
             if (posts != null && !posts.isEmpty()) {
-                Log.d("HomeFragment", "Número de posts: " + posts.size()); // Registra el número de posts obtenidos.
+               // Log.d("HomeFragment", "Número de posts: " + posts.size()); // Registra el número de posts obtenidos.
                 PostAdapter adapter = new PostAdapter(posts); // Crea un nuevo adaptador con los posts.
                 binding.recyclerView.setAdapter(adapter); // Establece el adaptador en el RecyclerView.
                 adapter.notifyDataSetChanged(); // Notifica al adaptador que los datos han cambiado.

@@ -74,7 +74,7 @@ public class PerfilFragment extends Fragment {
     }
 
     private void setupToolbar() {
-        ((AppCompatActivity) requireActivity()).setSupportActionBar(binding.getRoot().findViewById(R.id.toolbar_filtro));
+        ((AppCompatActivity) requireActivity()).setSupportActionBar(binding.getRoot().findViewById(R.id.tools_filtro));
         // Configura la barra de herramientas utilizando el layout inflado y lo establece como soporte en la actividad actual.
     }
 

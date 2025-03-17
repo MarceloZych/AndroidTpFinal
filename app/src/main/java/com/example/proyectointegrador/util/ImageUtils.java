@@ -26,7 +26,7 @@ public class ImageUtils {
     // Método estático que solicita permisos necesarios para acceder a imágenes
     public static void pedirPermisos(Activity activity, String[] permisos, int requestCode) {
         // Verifica la versión del SDK para determinar qué permisos solicitar
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.UPSIDE_DOWN_CAKE) {
             permisos = new String[] {
                     Manifest.permission.READ_MEDIA_IMAGES // Permiso para leer imágenes en Android 13 y superior
             };
