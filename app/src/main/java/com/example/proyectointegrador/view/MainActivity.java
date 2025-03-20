@@ -34,9 +34,8 @@ public class MainActivity extends AppCompatActivity {
     protected void onStart() {
         super.onStart(); // Llama al método onStart de la clase padre
 
-        /*
-        Aquí se puede verificar si hay una sesión activa y redirigir al usuario a HomeActivity.
-        Descomentando este bloque, se puede observar si el usuario está logueado.
+        //Aquí se puede verificar si hay una sesión activa y redirigir al usuario a HomeActivity.
+        //sDescomentando este bloque, se puede observar si el usuario está logueado.
         if (viewModel != null) {
             viewModel.verificarSesionActiva().observe(this, si -> {
                 if (Boolean.TRUE.equals(si)) {
@@ -46,7 +45,6 @@ public class MainActivity extends AppCompatActivity {
                 }
             });
         }
-        */
     }
 
     // Método privado que maneja los eventos de clic en los botones y otros elementos interactivos

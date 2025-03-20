@@ -15,9 +15,7 @@ public class User extends ParseObject {
     }
 
     public void setRedSocial(String redSocial) {
-        if (redSocial == null){
-            put("redSocial", redSocial);
-        }
+            put("redsocial", redSocial == null ? "www.instagram.com" : redSocial) ;
     }
 
     public String getFotoPerfil() {

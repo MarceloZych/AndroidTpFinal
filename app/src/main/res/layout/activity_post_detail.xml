@@ -80,7 +80,7 @@
     <!-- Main Content -->
     <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         app:layout_behavior="@string/appbar_scrolling_view_behavior"
         android:padding="16dp">
 
@@ -110,6 +110,15 @@
                     android:layout_marginTop="5dp"
                     app:tabIndicatorColor="@color/mustard"
                     app:tabIndicatorHeight="4dp" />
+                <ImageView
+                    android:id="@+id/fabComentar"
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    android:src="@drawable/ic_comentario"
+                    android:scaleType="centerCrop"
+                    android:layout_margin="30dp"
+                    android:layout_gravity="end|bottom"
+                    android:padding="7dp"/>
             </LinearLayout>
             <!-- Post Details -->
             <TextView
@@ -153,17 +162,44 @@
                 android:textColor="@color/black"
                 android:textSize="14sp"
                 android:layout_marginBottom="8dp" />
+
+            <androidx.cardview.widget.CardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                app:cardCornerRadius="8dp"
+                app:cardElevation="4dp">
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="8dp">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Comentarios"
+                    android:textSize="16sp"
+                    android:textStyle="bold"
+                    android:textColor="@color/black"
+                    android:padding="8dp"/>
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/rvComentarios"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:nestedScrollingEnabled="false"
+                    app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"/>
+                </LinearLayout>
+            </androidx.cardview.widget.CardView>
+            <Button
+                android:id="@+id/btnEliminarPost"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Eliminar Post"
+                android:layout_marginTop="16dp"
+                android:layout_gravity="center_horizontal"/>
+
         </LinearLayout>
     </androidx.core.widget.NestedScrollView>
-
-    <!-- Floating Action Button -->
-    <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/fabComentar"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="end|center_horizontal"
-        android:layout_margin="36dp"
-        android:src="@drawable/ic_chat"
-        app:contentDescription="Comienza Un Chat" />
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
 

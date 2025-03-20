@@ -7,6 +7,7 @@ import androidx.lifecycle.LiveData; // Importa LiveData para observar datos que 
 import androidx.lifecycle.MutableLiveData; // Importa MutableLiveData para datos que pueden ser modificados
 
 import com.example.proyectointegrador.model.User; // Importa el modelo User
+import com.parse.Parse;
 import com.parse.ParseUser; // Importa ParseUser para trabajar con usuarios de Parse
 
 // Clase que proporciona métodos para manejar la autenticación de usuarios
@@ -14,6 +15,16 @@ public class AuthProvider {
 
     // Constructor por defecto
     public AuthProvider() {
+    }
+
+    public String getCurrentUserID() {
+        ParseUser currentUser = ParseUser.getCurrentUser();
+
+        if (currentUser != null ) {
+            return currentUser.getObjectId();
+        } else {
+            return null;
+        }
     }
 
     // Método para iniciar sesión con email y contraseña

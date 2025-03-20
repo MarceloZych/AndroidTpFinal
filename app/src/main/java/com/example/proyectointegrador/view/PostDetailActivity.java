@@ -2,6 +2,7 @@ package com.example.proyectointegrador.view; // Paquete donde se encuentra la cl
 
 import android.os.Bundle; // Importa Bundle para manejar el estado de la actividad
 import android.util.Log; // Importa Log para registrar mensajes en el Logcat
+import android.view.View;
 import android.widget.EditText; // Importa EditText para manejar campos de texto
 import android.widget.LinearLayout; // Importa LinearLayout para crear un layout vertical
 import android.widget.RelativeLayout; // Importa RelativeLayout para crear un layout relativo
@@ -10,13 +11,16 @@ import android.widget.Toast; // Importa Toast para mostrar mensajes breves al us
 import androidx.appcompat.app.AlertDialog; // Importa AlertDialog para mostrar diálogos de alerta
 import androidx.appcompat.app.AppCompatActivity; // Importa AppCompatActivity para utilizar características modernas de Android
 import androidx.lifecycle.ViewModelProvider; // Importa ViewModelProvider para obtener instancias de ViewModels
+import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.example.proyectointegrador.R; // Importa los recursos del proyecto
+import com.example.proyectointegrador.adapters.ComentarioAdapter;
 import com.example.proyectointegrador.adapters.EfectoTransformer; // Importa el adaptador de efectos para el ViewPager
 import com.example.proyectointegrador.adapters.ImageSliderAdapter; // Importa el adaptador personalizado para el slider de imágenes
 import com.example.proyectointegrador.databinding.ActivityPostDetailBinding; // Importa el binding generado para ActivityPostDetail
 import com.example.proyectointegrador.viewmodel.PostDetailViewModel; // Importa el ViewModel asociado a los detalles del post
 import com.google.android.material.tabs.TabLayoutMediator; // Importa TabLayoutMediator para conectar TabLayout y ViewPager2
+import com.parse.ParseUser;
 import com.squareup.picasso.Picasso; // Importa Picasso, una biblioteca para cargar imágenes
 
 import java.util.ArrayList; // Importa ArrayList para manejar listas dinámicas
@@ -25,27 +29,58 @@ import java.util.ArrayList; // Importa ArrayList para manejar listas dinámicas
 public class PostDetailActivity extends AppCompatActivity {
     private ActivityPostDetailBinding binding; // Variable para el binding de la actividad
     private PostDetailViewModel viewModel; // Variable para el ViewModel asociado a esta actividad
+    private ComentarioAdapter comentarioAdapter;
     private String postId; // Variable que almacenará el ID del post
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState); // Llama al método onCreate de la clase padre
 
+        viewModel = new ViewModelProvider(this).get(PostDetailViewModel.class); // Obtiene una instancia del ViewModel
+
         binding = ActivityPostDetailBinding.inflate(getLayoutInflater()); // Infla el layout utilizando View Binding
         setContentView(binding.getRoot()); // Establece el contenido de la actividad a la vista inflada
 
-        viewModel = new ViewModelProvider(this).get(PostDetailViewModel.class); // Obtiene una instancia del ViewModel
-
         postId = getIntent().getStringExtra("postId"); // Obtiene el ID del post desde los extras del Intent
+        if (postId != null) {
+            viewModel.fetchComments(postId);
+        }
+
+        binding.rvComentarios.setLayoutManager(new LinearLayoutManager(this));
+        comentarioAdapter = new ComentarioAdapter(new ArrayList<>());
+        binding.rvComentarios.setAdapter(comentarioAdapter);
+
+        viewModel.getCommentsLiveData().observe(this, comentarios -> {
+            comentarioAdapter.setComentarios(comentarios);
+            comentarioAdapter.notifyDataSetChanged();
+        });
+
+        String currentUser = ParseUser.getCurrentUser().getUsername();
+        String perfilUserId = getIntent().getStringExtra("username");
+
+
+        if (postId != null && currentUser.equals(perfilUserId)) {
+            binding.btnEliminarPost.setVisibility(View.VISIBLE);
+            binding.btnEliminarPost.setOnClickListener(v -> confirmaBorrar());
+        } else {
+            binding.btnEliminarPost.setVisibility(View.GONE);
+        }
 
         detailInfo(); // Muestra la información del post en la interfaz
         setupObservers(); // Configura los observadores del ViewModel
 
-        if (postId != null) {
-            viewModel.fetchComments(postId);  // Si hay un ID de post, intenta obtener los comentarios asociados al mismo.
-        }
-
         binding.fabComentar.setOnClickListener(v -> showDialogComment());  // Configura el evento al hacer clic en el botón flotante (FAB) para comentar.
+    }
+
+    private void confirmaBorrar() {
+        AlertDialog.Builder alert = new AlertDialog.Builder(this);
+        alert.setTitle("Confirmación");
+        alert.setMessage("¿Estás seguro de que deseas eliminar este post?");
+
+        alert.setPositiveButton("Eliminar", (dialog, which) -> viewModel.eliminarPost(postId));
+        alert.setNegativeButton("Cancelar", (dialog, which) -> dialog.dismiss());
+
+        alert.show();
     }
 
     // Método privado que muestra un diálogo para agregar un comentario al post.
@@ -59,7 +94,7 @@ public class PostDetailActivity extends AppCompatActivity {
 
         LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
                 LinearLayout.LayoutParams.MATCH_PARENT,
-                LinearLayout.LayoutParams.MATCH_PARENT
+                LinearLayout.LayoutParams.WRAP_CONTENT
         );  // Crea parámetros de layout que permiten que el EditText ocupe todo el espacio disponible.
 
         editText.setLayoutParams(params);  // Aplica los parámetros al EditText.
@@ -103,6 +138,11 @@ public class PostDetailActivity extends AppCompatActivity {
                 Toast.makeText(this, "ERROR: " + error, Toast.LENGTH_SHORT).show();  // Muestra un mensaje si hay un error en la obtención de comentarios.
             }
         });
+
+        viewModel.getSuccessLiveData().observe(this, message -> {
+            Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
+            finish();
+        });
     }
 
     private void detailInfo() {
@@ -124,18 +164,18 @@ public class PostDetailActivity extends AppCompatActivity {
 
         ArrayList<String> urls = getIntent().getStringArrayListExtra("imagenes"); // Obtiene las URLs de las imágenes desde los extras del Intent
 
-        String titulo = "Lugar: " + getIntent().getStringExtra("titulo"); // Crea una cadena con información sobre el lugar.
+        String titulo = "Lugar: " + getIntent().getStringExtra("title"); // Crea una cadena con información sobre el lugar.
         binding.lugar.setText(titulo); // Establece la cadena en la vista correspondiente.
 
         String categoria = "Categoria: " + getIntent().getStringExtra("categoria"); // Crea una cadena con información sobre la categoría.
 
         binding.categoria.setText(categoria); // Establece la cadena en la vista correspondiente.
 
-        String comentario = "Descripción: " + getIntent().getStringExtra("descripcion"); // Crea una cadena con información sobre la descripción.
+        String comentario = "Descripción: " + getIntent().getStringExtra("description"); // Crea una cadena con información sobre la descripción.
 
         binding.description.setText(comentario); // Establece la cadena en la vista correspondiente.
 
-        String duracion = "Duración: " + getIntent().getIntExtra("duracion", 0) + " día/s"; // Crea una cadena con información sobre la duración.
+        String duracion = "Duración: " + getIntent().getIntExtra("duration", 0) + " día/s"; // Crea una cadena con información sobre la duración.
 
         binding.duracion.setText(duracion); // Establece la cadena en la vista correspondiente.
 

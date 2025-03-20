@@ -50,7 +50,8 @@ dependencies {
     implementation(libs.circleimageview) // Biblioteca de vista de imagen circular
 
     // Shape Of View
-    implementation(libs.shapeofview) // Biblioteca de vista de forma
+    implementation(libs.shapeofview)
+    implementation(libs.cardview) // Biblioteca de vista de forma
 
     // Dependencias de pruebas
     testImplementation(libs.junit) // Biblioteca de pruebas de JUnit

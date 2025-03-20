@@ -21,4 +21,6 @@
     <string name="duraci_n_del_viaje_ej_3_d_as">Duración del viaje (ej. 3 días)</string>
     <string name="presupuesto_estimado_usd_s">Presupuesto estimado (USD)s</string>
     <string name="publicar">Publicar</string>
+    <string name="cargando">Cargando datos...</string>
+    <string name="Chats">Chats</string>
 </resources>

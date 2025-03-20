@@ -136,7 +136,7 @@ public class PostProvider {
                             User user = ParseObject.createWithoutData(User.class, parseUser.getObjectId());
                             user.setUsername(parseUser.getUsername());
                             user.setEmail(parseUser.getEmail());
-                            user.setFotoPerfil(parseUser.getString("fotoperfil"));
+                            user.setFotoPerfil(parseUser.getString("foto_perfil"));
                             user.setRedSocial(parseUser.getString("redSocial"));
 
                             post.setUser(user);  // Asigna el usuario convertido al objeto Post
@@ -161,7 +161,9 @@ public class PostProvider {
     }
 
     // Método para eliminar un Post por su ID.
-    public void removePost(String postId) {
+    public LiveData<String> removePost(String postId) {
+        MutableLiveData<String> result = new MutableLiveData<>();
+
         ParseQuery<Post> query = ParseQuery.getQuery(Post.class);
 
         query.getInBackground(postId, (post, e) -> {
@@ -169,14 +171,18 @@ public class PostProvider {
                 post.deleteInBackground(e1 -> {
                     if (e1 == null) {
                         Log.d("PostDelete", "Post eliminado con éxito.");  // Registra éxito en la eliminación.
+                        result.postValue("Post eliminado correctamente");
                     } else {
                         Log.e("PostDelete", "Error al eliminar el post: ", e1);  // Registra error si ocurre.
+                        result.postValue("Error al eliminar el post: " + e1.getMessage());
                     }
                 });
             } else {
                 Log.e("PostDelete", "Error al encontrar el post: ", e);  // Registra error si no se encuentra el Post.
+                result.postValue("Error al encontrar el post: " + e.getMessage());
             }
         });
+        return result;
     }
 
     // Método para obtener detalles específicos de un Post por su ID.

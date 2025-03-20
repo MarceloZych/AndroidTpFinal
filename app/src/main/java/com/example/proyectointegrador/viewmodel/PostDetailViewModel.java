@@ -14,6 +14,7 @@ import java.util.List; // Importa List para trabajar con colecciones
 public class PostDetailViewModel extends ViewModel {
     private final MutableLiveData<List<ParseObject>> commentsLiveData = new MutableLiveData<>(); // LiveData que contiene una lista de comentarios
     private final MutableLiveData<String> errorLivedData = new MutableLiveData<>(); // LiveData que contiene mensajes de error
+    private final MutableLiveData<String> successLiveData = new MutableLiveData<>();
     private final PostProvider postProvider; // Proveedor que maneja operaciones relacionadas con los posts
 
     // Constructor privado para inicializar el ViewModel y su proveedor
@@ -31,6 +32,8 @@ public class PostDetailViewModel extends ViewModel {
         return errorLivedData; // Devuelve los mensajes de error observables
     }
 
+    public LiveData<String> getSuccessLiveData(){ return successLiveData;}
+
     // Método público para obtener los comentarios de un post específico
     public void fetchComments(String postId) {
         postProvider.fetchComments(postId, new PostProvider.CommentsCallback() { // Llama al método fetchComments en el PostProvider
@@ -38,10 +41,19 @@ public class PostDetailViewModel extends ViewModel {
             public void onSuccess(List<ParseObject> comments) {
                 commentsLiveData.setValue(comments); // Si la operación es exitosa, establece la lista de comentarios en LiveData
             }
-
             @Override
             public void onFailure(Exception e) {
                 errorLivedData.setValue(e.getMessage()); // Si hay un error, establece el mensaje de error en LiveData
+            }
+        });
+    }
+
+    public void eliminarPost(String postId ) {
+        postProvider.removePost(postId).observeForever(mensaje -> {
+            if (mensaje.equals("Post eliminado correctamente")) {
+                successLiveData.postValue(mensaje);
+            } else {
+                errorLivedData.postValue(mensaje);
             }
         });
     }

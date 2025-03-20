@@ -22,4 +22,16 @@ public class MainViewModel extends ViewModel {
         });
         return loginResult;
     }
+
+    public LiveData<Boolean> verificarSesionActiva() {
+        MutableLiveData<Boolean> si = new MutableLiveData<>();
+
+        if (authProvider.getCurrentUserID() != null) {
+
+            si.setValue(true);
+        } else {
+            si.setValue(false);
+        }
+        return si;
+    }
 }
