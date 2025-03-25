@@ -41,6 +41,7 @@ dependencies {
     implementation(libs.material) // Biblioteca de Material Design
     implementation(libs.activity) // Biblioteca de Activity
     implementation(libs.constraintlayout) // Biblioteca de Layout de Restricciones
+    implementation("androidx.swiperefreshlayout:swiperefreshlayout:1.1.0")
 
     // Para manejar imágenes
     implementation(libs.picasso) // Biblioteca de manejo de imágenes
@@ -61,5 +62,6 @@ dependencies {
     // Parse SDK
     implementation(libs.bolts.tasks)
     implementation(libs.parse)
-
+    implementation("com.github.parse-community:ParseLiveQuery-Android:1.2.2")         // Consultas en tiempo real
+    implementation("com.github.parse-community.Parse-SDK-Android:fcm:4.3.0")          // Integración con Firebase Cloud Messaging
 }

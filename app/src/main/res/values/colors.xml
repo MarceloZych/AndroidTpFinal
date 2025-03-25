@@ -1,7 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <color name="mustard">#667628</color>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
     <color name="red">#E10F0F</color>
-    <color name="mustard">#474903</color>
+    <color name="primary">#6B7280</color>
+    <color name="primary_variant">#374151</color>
+    <color name="secondary">#10B981</color>
+    <color name="background">#F9FAFB</color>
+    <color name="on_background">#111827</color>
+    <color name="on_surface">#111827</color>
+    <color name="gray_light">#D1D5DB</color>
+    <color name="gray_dark">#6B7280</color>
 </resources>

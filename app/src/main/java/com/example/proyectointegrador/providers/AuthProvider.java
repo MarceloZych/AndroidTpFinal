@@ -8,7 +8,11 @@ import androidx.lifecycle.MutableLiveData; // Importa MutableLiveData para datos
 
 import com.example.proyectointegrador.model.User; // Importa el modelo User
 import com.parse.Parse;
+import com.parse.ParseQuery;
 import com.parse.ParseUser; // Importa ParseUser para trabajar con usuarios de Parse
+
+import java.util.ArrayList;
+import java.util.List;
 
 // Clase que proporciona métodos para manejar la autenticación de usuarios
 public class AuthProvider {
@@ -20,7 +24,7 @@ public class AuthProvider {
     public String getCurrentUserID() {
         ParseUser currentUser = ParseUser.getCurrentUser();
 
-        if (currentUser != null ) {
+        if (currentUser != null) {
             return currentUser.getObjectId();
         } else {
             return null;
@@ -94,5 +98,44 @@ public class AuthProvider {
         });
 
         return logoutResult;  // Devuelve el resultado del cierre de sesión (true o false)
+    }
+
+    public LiveData<List<ParseUser>> getAllUsers() {
+        MutableLiveData<List<ParseUser>> usersResult = new MutableLiveData<>();
+        ParseQuery<ParseUser> query = ParseUser.getQuery();
+
+        query.include("username");
+        query.orderByAscending("username");
+
+        query.findInBackground((users, e) -> {
+            if (e == null) {
+                if (users == null || users.isEmpty()) {
+                    Log.d("AuthProvider", "No se encontraron usuarios");
+                    usersResult.setValue(new ArrayList<>());
+                } else {
+                    Log.d("AuthProvider", "Se encontraron " + users.size());
+                    for (ParseUser user : users) {
+                        Log.d("AuthProvider", "Usuario encontrado: " + user.getUsername() + " - ID: " + user.getObjectId());
+                    }
+                    ParseUser currentUser = ParseUser.getCurrentUser();
+                    String currentUserId = currentUser != null ? currentUser.getObjectId() : null;
+
+                    List<ParseUser> filteredUsers = new ArrayList<>();
+                    for (ParseUser user : users) {
+                        if (!user.getObjectId().equals(currentUserId)) {
+                            filteredUsers.add(user);
+                        }
+
+                    }
+
+                    Log.d("AuthProvider", "Usuarios después de filtrar: " + filteredUsers.size());
+                    usersResult.setValue(filteredUsers);
+                }
+            } else {
+                Log.e("AuthProvider", "Error al obtener usuarios: " + e);
+                usersResult.setValue(null);
+            }
+        });
+        return usersResult;
     }
 }

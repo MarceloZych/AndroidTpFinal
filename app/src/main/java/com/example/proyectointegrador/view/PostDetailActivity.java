@@ -1,7 +1,6 @@
 package com.example.proyectointegrador.view; // Paquete donde se encuentra la clase
 
 import android.os.Bundle; // Importa Bundle para manejar el estado de la actividad
-import android.util.Log; // Importa Log para registrar mensajes en el Logcat
 import android.view.View;
 import android.widget.EditText; // Importa EditText para manejar campos de texto
 import android.widget.LinearLayout; // Importa LinearLayout para crear un layout vertical
@@ -15,9 +14,9 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.example.proyectointegrador.R; // Importa los recursos del proyecto
 import com.example.proyectointegrador.adapters.ComentarioAdapter;
-import com.example.proyectointegrador.adapters.EfectoTransformer; // Importa el adaptador de efectos para el ViewPager
 import com.example.proyectointegrador.adapters.ImageSliderAdapter; // Importa el adaptador personalizado para el slider de imágenes
 import com.example.proyectointegrador.databinding.ActivityPostDetailBinding; // Importa el binding generado para ActivityPostDetail
+import com.example.proyectointegrador.util.ImageUtils;
 import com.example.proyectointegrador.viewmodel.PostDetailViewModel; // Importa el ViewModel asociado a los detalles del post
 import com.google.android.material.tabs.TabLayoutMediator; // Importa TabLayoutMediator para conectar TabLayout y ViewPager2
 import com.parse.ParseUser;
@@ -188,7 +187,7 @@ public class PostDetailActivity extends AppCompatActivity {
 
             binding.viewPager.setAdapter(imageSliderAdapter); // Establece el adaptador en un ViewPager.
 
-            binding.viewPager.setPageTransformer(new EfectoTransformer()); // Aplica una transformación visual a las páginas del ViewPager.
+            binding.viewPager.setPageTransformer(new ImageUtils.EfectoTransformer()); // Aplica una transformación visual a las páginas del ViewPager.
 
             new TabLayoutMediator(binding.tabLayout, binding.viewPager, (tab, position) -> {
             }).attach();

@@ -8,9 +8,12 @@ import android.net.Uri; // Importa Uri para manejar URIs (identificadores de rec
 import android.os.Build; // Importa Build para verificar la versión del sistema operativo
 import android.provider.MediaStore; // Importa MediaStore para acceder a contenido multimedia
 import android.Manifest; // Importa Manifest para manejar permisos
+import android.view.View;
 
 import androidx.activity.result.ActivityResultLauncher; // Importa ActivityResultLauncher para manejar resultados de actividades
+import androidx.annotation.NonNull;
 import androidx.core.app.ActivityCompat; // Importa ActivityCompat para manejar compatibilidad con versiones anteriores
+import androidx.viewpager2.widget.ViewPager2;
 
 import com.parse.ParseException; // Importa ParseException para manejar errores de Parse
 import com.parse.ParseFile; // Importa ParseFile para trabajar con archivos en Parse
@@ -120,5 +123,17 @@ public class ImageUtils {
         cursor.close();  // Cierra el cursor después de usarlo
 
         return path;  // Devuelve la ruta real obtenida del URI
+    }
+
+    public static class EfectoTransformer implements ViewPager2.PageTransformer{
+        private static final float MIN_SCALE = 0.85f;
+
+        @Override
+        public void transformPage(@NonNull View page, float position) {
+            float scale = Math.max(MIN_SCALE, 1 - Math.abs(position));
+            page.setScaleX(scale);
+            page.setScaleY(scale);
+            page.setAlpha(0.5f + (scale - MIN_SCALE) / (1 - MIN_SCALE) * (1 - 0.5f));
+        }
     }
 }
