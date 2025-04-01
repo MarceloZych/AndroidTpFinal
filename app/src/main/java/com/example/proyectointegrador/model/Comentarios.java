@@ -14,19 +14,30 @@ public class Comentarios extends ParseObject {
     public String getId() {
         return getObjectId();
     }
+
     public ParseUser getUser() {
         return getParseUser("user");
     }
+
     public void setUser(ParseUser user) {
         put("user", user);
     }
     public Post getPost(Post post) {
         return (Post) getParseObject("post");
     }
+
     public void setPost(Post post) {
-        put("user", post);
+        put("post", post);
+    }
+
+    public String getTexto() {
+        return getString("texto");
+    }
+
+    public void setTexto(String texto) {
+        put("texto", texto);
     }
     public Date getCreateAt() {
-        return super.getCreatedAt();
+        return getCreatedAt();
     }
 }

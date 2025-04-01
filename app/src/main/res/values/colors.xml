@@ -1,15 +1,29 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <color name="mustard">#667628</color>
+    <color name="mustard_dark">#2A310D</color>
+    <color name="mustard_light">#D1ED4B</color>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
     <color name="red">#E10F0F</color>
+    <!-- Colores secundarios -->
+    <color name="background">#FFF8F1E5</color>
+    <color name="surface">#FFFFFF</color>
+    <color name="error">#B00020</color>
+
+    <!-- Colores de texto -->
+    <color name="on_mustard">#000000</color>
+    <color name="on_background">#212121</color>
+    <color name="on_surface">#212121</color>
+
+    <!-- Colores de bordes -->
+    <color name="border_light">#E0E0E0</color>
+    <color name="border_dark">#616161</color>
     <color name="primary">#6B7280</color>
-    <color name="primary_variant">#374151</color>
-    <color name="secondary">#10B981</color>
-    <color name="background">#F9FAFB</color>
-    <color name="on_background">#111827</color>
-    <color name="on_surface">#111827</color>
-    <color name="gray_light">#D1D5DB</color>
-    <color name="gray_dark">#6B7280</color>
+
+
+    <color name="background_dark">#121212</color>
+    <color name="surface_dark">#303030</color>
+    <color name="on_background_dark">#E0E0E0</color>
+    <color name="on_surface_dark">#E0E0E0</color>
 </resources>

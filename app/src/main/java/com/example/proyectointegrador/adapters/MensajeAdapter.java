@@ -13,6 +13,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.DiffUtil;
+import androidx.recyclerview.widget.ListAdapter;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.proyectointegrador.R;
@@ -22,16 +23,32 @@ import com.parse.ParseUser;
 import com.squareup.picasso.Picasso;
 
 import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
-public class MensajeAdapter extends RecyclerView.Adapter<MensajeAdapter.ViewHolder> {
-
-    private final List<Mensaje> mensajes;
+public class MensajeAdapter extends ListAdapter<Mensaje, MensajeAdapter.ViewHolder> {
     private final ParseUser currentUser;
 
-    public MensajeAdapter(List<Mensaje> mensajes, ParseUser currentUser) {
-        this.mensajes = mensajes;
+    private static final DiffUtil.ItemCallback<Mensaje> DIFF_CALLBACK = new DiffUtil.ItemCallback<Mensaje>() {
+        @Override
+        public boolean areItemsTheSame(@NonNull Mensaje oldItem, @NonNull Mensaje newItem) {
+            return oldItem.getObjectId().equals(newItem.getObjectId());
+        }
+
+        @Override
+        public boolean areContentsTheSame(@NonNull Mensaje oldItem, @NonNull Mensaje newItem) {
+            // Handle null cases for texto and fecha
+            String oldText = oldItem.getTexto() != null ? oldItem.getTexto() : "";
+            String newText = newItem.getTexto() != null ? newItem.getTexto() : "";
+            Date oldDate = oldItem.getFecha() != null ? oldItem.getFecha() : new Date(0);
+            Date newDate = newItem.getFecha() != null ? newItem.getFecha() : new Date(0);
+            return oldText.equals(newText) && oldDate.equals(newDate);
+        }
+    };
+
+    public MensajeAdapter(ParseUser currentUser) {
+        super(DIFF_CALLBACK);
         this.currentUser = currentUser;
     }
 
@@ -44,25 +61,11 @@ public class MensajeAdapter extends RecyclerView.Adapter<MensajeAdapter.ViewHold
     }
 
     @Override
-    public int getItemCount() {
-        return mensajes.size();
-    }
-
-    @SuppressLint("NotifyDataSetChanged")
-    public void setMensajes (List<Mensaje> nuevosMensajes) {
-        MensajeDiffCallback diffCallback = new MensajeDiffCallback(mensajes, nuevosMensajes);
-        DiffUtil.DiffResult diffResult = DiffUtil.calculateDiff(diffCallback);
-
-        this.mensajes.clear();
-        this.mensajes.addAll(nuevosMensajes);
-        notifyDataSetChanged();
-    }
-
-    @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        Mensaje mensaje = mensajes.get(position);
-        boolean esRemitente = mensaje.getRemitente().getObjectId().equals(currentUser.getObjectId());
-        holder.bind(mensaje, esRemitente);
+        Mensaje mensaje = getItem(position);
+        boolean isSender = mensaje.getRemitente() != null &&
+                mensaje.getRemitente().getObjectId().equals(currentUser.getObjectId());
+        holder.bind(mensaje, isSender);
     }
 
 
@@ -71,42 +74,30 @@ public class MensajeAdapter extends RecyclerView.Adapter<MensajeAdapter.ViewHold
         private final TextView tvMensajeRecibido;
         private final TextView tvFechaEnviado;
         private final TextView tvFechaRecibido;
-        private final Context context;
+        private final SimpleDateFormat sdf = new SimpleDateFormat("HH:mm dd/MM/yyyy", Locale.getDefault());
 
-        public ViewHolder(@NonNull View itemView) {
+        ViewHolder(@NonNull View itemView) {
             super(itemView);
             tvMensajeEnviado = itemView.findViewById(R.id.tvMensajeEnviado);
             tvMensajeRecibido = itemView.findViewById(R.id.tvMensajeRecibido);
             tvFechaEnviado = itemView.findViewById(R.id.tvFechaEnviado);
             tvFechaRecibido = itemView.findViewById(R.id.tvFechaRecibido);
-            ConstraintLayout layoutMensaje = itemView.findViewById(R.id.mensajeContainer);
-            context = itemView.getContext();
         }
-        @SuppressLint("ResourceAsColor")
-        public void bind(Mensaje mensaje, boolean esRemitente) {
-            tvMensajeEnviado.setVisibility(View.GONE);
-            tvMensajeRecibido.setVisibility(View.GONE);
-            tvFechaEnviado.setVisibility(View.GONE);
-            tvFechaRecibido.setVisibility(View.GONE);
+        void bind(Mensaje mensaje, boolean isSender) {
+            tvMensajeEnviado.setVisibility(isSender ? View.VISIBLE : View.GONE);
+            tvMensajeRecibido.setVisibility(isSender ? View.GONE : View.VISIBLE);
+            tvFechaEnviado.setVisibility(isSender ? View.VISIBLE : View.GONE);
+            tvFechaRecibido.setVisibility(isSender ? View.GONE : View.VISIBLE);
 
-            SimpleDateFormat sdf = new SimpleDateFormat("HH:mm dd/mm/yyyy", Locale.getDefault());
-            String fechaHora = sdf.format(mensaje.getFecha());
+            String texto = mensaje.getTexto() != null ? mensaje.getTexto() : "";
+            String fechaHora = mensaje.getFecha() != null ? sdf.format(mensaje.getFecha()) : "Unknown";
 
-            boolean isDarkMode = (context.getResources().getConfiguration().uiMode & Configuration.UI_MODE_NIGHT_MASK) == Configuration.UI_MODE_NIGHT_YES;
-            int textColor = isDarkMode ? R.color.white : R.color.black;
-
-            if (esRemitente) {
-                tvMensajeEnviado.setVisibility(View.VISIBLE);
-                tvFechaEnviado.setVisibility(View.VISIBLE);
-                tvMensajeEnviado.setText(mensaje.getTexto());
+            if (isSender) {
+                tvMensajeEnviado.setText(texto);
                 tvFechaEnviado.setText(fechaHora);
-                tvFechaEnviado.setTextColor(textColor);
             } else {
-                tvMensajeRecibido.setVisibility(View.VISIBLE);
-                tvFechaRecibido.setVisibility(View.VISIBLE);
-                tvMensajeRecibido.setText(mensaje.getTexto());
+                tvMensajeRecibido.setText(texto);
                 tvFechaRecibido.setText(fechaHora);
-                tvFechaRecibido.setTextColor(textColor);
             }
         }
     }

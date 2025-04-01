@@ -15,7 +15,7 @@ public class Post extends ParseObject {
     public void setTitulo(String titulo) { put("titulo", titulo); }
     public String getDescripcion() { return getString("descripcion"); }
     public void setDescripcion(String descripcion) { put("descripcion", descripcion); }
-    public int getDuracion() { return getInt("duracion"); }
+        public int getDuracion() { return getInt("duracion"); }
     public void setDuracion(int duracion) { put("duracion", duracion); }
     public String getCategoria() { return getString("categoria"); }
     public void setCategoria(String categoria) { put("categoria", categoria); }

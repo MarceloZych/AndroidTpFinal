@@ -1,6 +1,5 @@
 package com.example.proyectointegrador.view.fragments; // Paquete donde se encuentra la clase
 
-import android.app.AppComponentFactory;
 import android.util.Log;
 import android.view.LayoutInflater; // Importa LayoutInflater para inflar layouts
 import android.view.View; // Importa View para manejar vistas
@@ -23,174 +22,158 @@ import java.util.Objects;
 
 // Clase que representa un fragmento para mostrar chats
 public class ChatsFragment extends Fragment {
-
+    private static final String TAG = "ChatsFragment";
+    private static final String ARG_USER_ID = "otroUsuarioId";
     private FragmentChatsBinding binding;
-    private ChatViewModel chatViewModel;
+    private ChatViewModel viewModel;
     private MensajeAdapter adapter;
-    private ParseUser otroUsuario;
-    private boolean isObservingMessages = false;
+    private ParseUser otherUser;
 
-    // Método llamado para crear la vista del fragment
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         binding = FragmentChatsBinding.inflate(inflater, container, false);
-        View view = binding.getRoot();
+        setupUI();
+        setupViewModel();
+        loadChatUser();
+        return binding.getRoot();
+    }
 
-        if (binding.toolbar != null) {
-            ((AppCompatActivity) requireActivity()).setSupportActionBar(binding.toolbar);
-        }
-
-        if (binding.swipeRefreshLayout2 != null) {
-            binding.swipeRefreshLayout2.setOnRefreshListener(() -> {
-                if (chatViewModel != null) {
-                    chatViewModel.refreshMessages();
-                    binding.swipeRefreshLayout2.setRefreshing(false);
-                }
-            });
-        }
+    private void setupUI() {
+        AppCompatActivity activity = (AppCompatActivity) requireActivity();
+        activity.setSupportActionBar(binding.toolbar);
 
         LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
         layoutManager.setStackFromEnd(true);
-        binding.recyclerMensajes2.setLayoutManager(layoutManager);
-        adapter = new MensajeAdapter(new ArrayList<>(), ParseUser.getCurrentUser());
+        binding.recyclerMensajes.setLayoutManager(layoutManager);
+        adapter = new MensajeAdapter(ParseUser.getCurrentUser());
+        binding.recyclerMensajes.setAdapter(adapter);
+        binding.swipeRefreshLayout.setOnRefreshListener(() -> {
+            viewModel.refreshMessages();
+            binding.swipeRefreshLayout.setRefreshing(false);
+        });
+        binding.fabEnviar.setOnClickListener(v -> sendMessage());
+    }
 
-        chatViewModel = new ViewModelProvider(requireActivity()).get(ChatViewModel.class);
+    private void setupViewModel() {
+        viewModel = new ViewModelProvider(requireActivity()).get(ChatViewModel.class);
+    }
 
-        otroUsuario = obtenerOtroUsuario();
-        if (otroUsuario == null) {
-            Log.d("ChatsFragment", "No hay usuario seleccionado");
-            mostrarInterfazSinUsuario();
-            return view;
+    private void loadChatUser() {
+        otherUser = getUserFromArguments();
+        if (otherUser == null) {
+            showNoUserUI();
+            return;
         }
-        if (otroUsuario != null/*binding.toolbar != null && ((AppCompatActivity) requireActivity()).getSupportActionBar() != null*/) {
+        updateToolbarTitle();
+        showChatUI();
+        observeChatState();
+    }
 
-            Objects.requireNonNull((AppCompatActivity) requireActivity()).getSupportActionBar()
-                    .setTitle("Chat con " + otroUsuario.getUsername());
+    private ParseUser getUserFromArguments() {
+        Bundle args = getArguments();
+        if (args == null || !args.containsKey(ARG_USER_ID)) {
+            Log.e(TAG, "No user ID in arguments");
+            return null;
+        }
+        String userId = args.getString(ARG_USER_ID);
+        if (userId == null) return null;
+        try {
+            ParseUser user = ParseUser.createWithoutData(ParseUser.class, userId);
+            user.fetchIfNeeded();
+            return user.getUsername() != null ? user : null;
+        } catch (ParseException e) {
+            Log.e(TAG, "Error fetching user", e);
+            return null;
+        }
+    }
+
+    private void updateToolbarTitle() {
+        AppCompatActivity activity = (AppCompatActivity) requireActivity();
+        if (activity.getSupportActionBar() != null) {
+            activity.getSupportActionBar().setTitle("Chat with " + otherUser.getUsername());
+        }
+    }
+
+    private void observeChatState() {
+        viewModel.getChatState().observe(getViewLifecycleOwner(), state -> {
+            switch (state.getStatus()) {
+                case INITIAL:
+                case LOADING:
+                    binding.swipeRefreshLayout.setRefreshing(true);
+                    break;
+                case SUCCESS:
+                    binding.swipeRefreshLayout.setRefreshing(false);
+                    adapter.submitList(state.getMessages());
+                    if (!state.getMessages().isEmpty()) {
+                        binding.recyclerMensajes.scrollToPosition(state.getMessages().size() - 1);
+                    }
+                    break;
+                case ERROR:
+                    binding.swipeRefreshLayout.setRefreshing(false);
+                    binding.tvNoUserSelected.setText(state.getErrorMessage());
+                    binding.tvNoUserSelected.setVisibility(View.VISIBLE);
+                    break;
+            }
+        });
+        viewModel.loadMessages(otherUser);
+    }
+
+    private void sendMessage() {
+        String text = binding.etMensaje.getText().toString().trim();
+        if (!text.isEmpty()) {
+            viewModel.sendMessage(text, ParseUser.getCurrentUser(), otherUser);
+            binding.etMensaje.setText("");
+            binding.recyclerMensajes.scrollToPosition(adapter.getItemCount() - 1);
+        }
+    }
+
+    private void showChatUI() {
+        binding.tvNoUserSelected.setVisibility(View.GONE);
+        binding.recyclerMensajes.setVisibility(View.VISIBLE);
+        binding.etMensaje.setVisibility(View.VISIBLE);
+        binding.fabEnviar.setVisibility(View.VISIBLE);
+        binding.swipeRefreshLayout.setVisibility(View.VISIBLE);
+    }
+
+    private void showNoUserUI() {
+        binding.tvNoUserSelected.setVisibility(View.VISIBLE);
+        binding.recyclerMensajes.setVisibility(View.GONE);
+        binding.etMensaje.setVisibility(View.GONE);
+        binding.fabEnviar.setVisibility(View.GONE);
+        binding.swipeRefreshLayout.setVisibility(View.GONE);
+        if (isAdded()) {
+            requireActivity().getSupportFragmentManager().popBackStack();
+        }
+    }
+
+    public void updateUser(ParseUser newUser) {
+        otherUser = newUser;
+        if (otherUser == null) {
+            showNoUserUI();
         } else {
-            Log.e("ChatsFragment", "Error: otroUsuario es null");
-            mostrarInterfazSinUsuario();
-            return view;
+            updateToolbarTitle();
+            showChatUI();
+            observeChatState();
         }
-
-        mostrarInterfazConUsuario();
-        observareMensajes();
-        binding.fabEnviar2.setOnClickListener(v -> enviarMensaje());
-
-        return view;
     }
 
     @Override
     public void onResume() {
         super.onResume();
-        if (otroUsuario != null && !isObservingMessages) observareMensajes();
-
-        if (chatViewModel != null) chatViewModel.resumePolling();
+        if (otherUser != null) {
+            viewModel.resumePolling();
+        }
     }
 
     @Override
     public void onPause() {
         super.onPause();
-        isObservingMessages = false;
-        if (chatViewModel != null) chatViewModel.pausePolling();
+        viewModel.pausePolling();
     }
 
     @Override
     public void onDestroyView() {
         super.onDestroyView();
         binding = null;
-    }
-
-    private void observareMensajes() {
-        if (otroUsuario != null) {
-            isObservingMessages = true;
-            chatViewModel.getMensajes(otroUsuario).observe(getViewLifecycleOwner(), mensajes -> {
-                        Log.d("ChatFragment", "Mensajes cargados: " + mensajes.size());
-                        adapter.setMensajes(mensajes);
-                        if (!mensajes.isEmpty())
-                            binding.recyclerMensajes2.scrollToPosition(mensajes.size() - 1);
-                    }
-            );
-        }
-    }
-
-    private ParseUser obtenerOtroUsuario() {
-        Bundle bundle = getArguments();
-        if (bundle != null && bundle.containsKey("otroUsuarioId")) {
-            String userId = bundle.getString("otroUsuarioId");
-            if (userId == null) return null;
-
-            ParseUser user = ParseUser.createWithoutData(ParseUser.class, userId);
-            try {
-                user.fetchIfNeeded();
-                if (user.getUsername() == null) {
-                    Log.e("ChatsFragment", "Error: Usuario no tiene nombre de usuario");
-                    return null;
-                }
-                Log.d("ChatsFragment", "Usuario cargado: " + user.getUsername());
-                return user;
-            } catch (ParseException e) {
-                Log.e("ChatFragment", "Error al cargar el usuario", e);
-            }
-        } else {
-            Log.e("ChatsFragment", "No se encontró 'otroUsuarioId' en los argumentos");
-        }
-        return null;
-    }
-
-
-    public void updateUser(ParseUser newUser) {
-        this.otroUsuario = newUser;
-
-        if (getActivity() != null && ((AppCompatActivity) getActivity()).getSupportActionBar() != null) {
-            ((AppCompatActivity) getActivity()).getSupportActionBar()
-                    .setTitle("Chat con: " + otroUsuario.getUsername());
-        }
-        if (otroUsuario == null) {
-            mostrarInterfazSinUsuario();
-            return;
-        }
-        mostrarInterfazConUsuario();
-        isObservingMessages = false;
-        observareMensajes();
-    }
-
-    private void enviarMensaje() {
-        String texto = binding.etMensaje.getText().toString().trim();
-        if (!texto.isEmpty()) {
-            if (chatViewModel != null) {
-                chatViewModel.enviarMensaje(texto, ParseUser.getCurrentUser(), otroUsuario);
-                binding.etMensaje.setText("");
-                binding.recyclerMensajes2.post(() ->
-                        binding.recyclerMensajes2.scrollToPosition(adapter.getItemCount()));
-            }
-        }
-    }
-
-    private void mostrarInterfazSinUsuario() {
-        if (getView() != null) {
-            getView().post(() -> {
-                binding.recyclerMensajes2.setVisibility(View.GONE);
-                binding.etMensaje.setVisibility(View.GONE);
-                binding.fabEnviar2.setVisibility(View.GONE);
-                if (binding.swipeRefreshLayout2 != null) {
-                    binding.swipeRefreshLayout2.setVisibility(View.GONE);
-                }
-                binding.tvNoUserSelected2.setVisibility(View.GONE);
-
-                if (isAdded()) {
-                    requireActivity().getSupportFragmentManager().popBackStack();
-                }
-            });
-        }
-    }
-
-    private void mostrarInterfazConUsuario() {
-        binding.tvNoUserSelected2.setVisibility(View.GONE);
-        binding.recyclerMensajes2.setVisibility(View.VISIBLE);
-        binding.etMensaje.setVisibility(View.VISIBLE);
-        binding.fabEnviar2.setVisibility(View.VISIBLE);
-        if (binding.swipeRefreshLayout2 != null) {
-            binding.swipeRefreshLayout2.setVisibility(View.VISIBLE);
-        }
     }
 }

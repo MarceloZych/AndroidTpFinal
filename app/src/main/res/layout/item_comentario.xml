@@ -3,17 +3,18 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:layout_margin="8dp"
-    app:cardCornerRadius="8dp"
-    app:cardElevation="2dp"
+    android:layout_height="wrap_content"
+    android:layout_marginBottom="8dp"
+    app:cardCornerRadius="12dp"
+    app:cardElevation="3dp"
+    app:cardBackgroundColor="@color/surface"
     >
 
     <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
         android:orientation="vertical"
-        android:padding="10dp">
+        android:padding="16dp">
 
         <TextView
             android:id="@+id/txtUsuario"
@@ -21,16 +22,21 @@
             android:layout_height="wrap_content"
             android:textStyle="bold"
             android:textSize="14sp"
-            android:textColor="@color/black"
+            android:textColor="@color/on_surface"
+            android:maxLines="1"
+            android:ellipsize="end"
             />
 
         <TextView
             android:id="@+id/txtComentario"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textSize="14sp"
             android:textColor="@color/mustard"
             android:layout_marginTop="4dp"
+            android:lineSpacingExtra="2dp"
+            android:autoLink="web|email"
+            android:linksClickable="true"
             />
 
         <TextView
@@ -38,7 +44,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textSize="12sp"
-            android:textColor="@color/black"
+            android:textColor="@color/background_dark"
             android:layout_marginTop="4dp"
             />
 

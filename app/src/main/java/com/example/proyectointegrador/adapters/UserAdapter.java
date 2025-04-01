@@ -7,6 +7,10 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+
+import androidx.recyclerview.widget.DiffUtil;
+import androidx.recyclerview.widget.ListAdapter;
+import androidx.recyclerview.widget.ListAdapter;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.proyectointegrador.R;
@@ -14,54 +18,81 @@ import com.parse.ParseUser;
 
 import java.util.List;
 
-public class UserAdapter extends RecyclerView.Adapter<UserAdapter.UserViewHolder>{
-    private final List<ParseUser> users;  // Lista de usuarios a mostrar
-    private final OnUserClickListener listener;  // Listener para manejar clics en usuarios
-
+public class UserAdapter extends ListAdapter<ParseUser, UserAdapter.UserViewHolder> {
+    private final OnUserClickListener listener;
     public interface OnUserClickListener {
         void onUserClick(ParseUser user);
     }
-    public UserAdapter(List<ParseUser> users, OnUserClickListener listener) {
-        this.users = users;
+    // Improved DiffUtil callback with better null handling
+    private static final DiffUtil.ItemCallback<ParseUser> DIFF_CALLBACK = new DiffUtil.ItemCallback<ParseUser>() {
+        @Override
+        public boolean areItemsTheSame(@NonNull ParseUser oldItem, @NonNull ParseUser newItem) {
+            // Check if items represent the same user based on ObjectId
+            try {
+                return oldItem.getObjectId() != null &&
+                        newItem.getObjectId() != null &&
+                        oldItem.getObjectId().equals(newItem.getObjectId());
+            } catch (Exception e) {
+                // Fallback in case of Parse-related errors
+                return false;
+            }
+        }
+
+        @Override
+        public boolean areContentsTheSame(@NonNull ParseUser oldItem, @NonNull ParseUser newItem) {
+            // Check if the content (username) is the same
+            String oldUsername = oldItem.getUsername();
+            String newUsername = newItem.getUsername();
+
+            if (oldUsername == null && newUsername == null) {
+                return true;
+            }
+            if (oldUsername == null || newUsername == null) {
+                return false;
+            }
+            return oldUsername.equals(newUsername);
+        }
+    };
+    public UserAdapter(OnUserClickListener listener) {
+        super(DIFF_CALLBACK);
         this.listener = listener;
-        Log.d("UsersAdapter", "Adapter creado con " + (users != null ? users.size() : 0) + " usuarios");
     }
+
     @NonNull
     @Override
     public UserViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        // Inflar el layout del item de usuario
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_user, parent, false);
-        return new UserViewHolder(view);
+        View view = LayoutInflater.from(parent.getContext())
+                .inflate(R.layout.item_user, parent, false);
+        return new UserViewHolder(view, listener);
     }
+
     @Override
     public void onBindViewHolder(@NonNull UserViewHolder holder, int position) {
-        ParseUser user = users.get(position);
-        Log.d("UsersAdapter", "Binding usuario en posición " + position + ": " + user.getUsername());
-        holder.bind(user);  // Vincular los datos del usuario al ViewHolder
+        ParseUser user = getItem(position);
+        if (user != null) {
+            holder.bind(user);
+        }
     }
-    @Override
-    public int getItemCount() {
-        return users != null ? users.size() : 0;
-    }
+
     class UserViewHolder extends RecyclerView.ViewHolder {
         private final TextView tvUsername;  // TextView para mostrar el nombre de usuario
 
-        public UserViewHolder(@NonNull View itemView) {
+        UserViewHolder(@NonNull View itemView, OnUserClickListener listener) {
             super(itemView);
-            tvUsername = itemView.findViewById(R.id.tvUsername);  // Encontrar el TextView en el layout
-        }
-        void bind(ParseUser user) {
-            String username = user.getUsername();
-            // Mostrar el nombre de usuario o un texto por defecto si es nulo
-            tvUsername.setText(username != null ? username : "Usuario sin nombre");
-
-            // Configurar el listener de clic para el elemento completo
+            tvUsername = itemView.findViewById(R.id.tvUsername);
             itemView.setOnClickListener(v -> {
-                Log.d("UsersAdapter", "Click en usuario: " + user.getUsername());
-                if (listener != null) {
-                    listener.onUserClick(user);  // Notificar al listener del clic
+                int position = getAdapterPosition();
+                if (position != RecyclerView.NO_POSITION && listener != null) {
+                    ParseUser user = (ParseUser) itemView.getTag();
+                    if (user != null) {
+                        listener.onUserClick(user);
+                    }
                 }
             });
+        }
+        void bind(ParseUser user) {
+            itemView.setTag(user);
+            tvUsername.setText(user.getUsername() != null ? user.getUsername() : "Unnamed User");
         }
     }
 

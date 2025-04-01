@@ -23,10 +23,15 @@ import androidx.appcompat.app.AppCompatActivity; // Importa AppCompatActivity pa
 import androidx.core.view.MenuProvider; // Importa MenuProvider para manejar menús en el fragmento
 import androidx.fragment.app.Fragment; // Importa Fragment para crear un fragmento
 import androidx.lifecycle.Lifecycle; // Importa Lifecycle para gestionar el ciclo de vida del fragmento
+import androidx.lifecycle.ViewModelProvider;
+import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.example.proyectointegrador.R; // Importa los recursos del proyecto
+import com.example.proyectointegrador.adapters.PostAdapter;
 import com.example.proyectointegrador.databinding.FragmentPerfilBinding; // Importa el binding generado para FragmentPerfil
 import com.example.proyectointegrador.util.ImageUtils; // Importa la clase utilitaria ImageUtils
+import com.example.proyectointegrador.view.HomeActivity;
+import com.example.proyectointegrador.viewmodel.PostViewModel;
 import com.parse.ParseUser; // Importa ParseUser para trabajar con usuarios de Parse
 import com.squareup.picasso.Picasso; // Importa Picasso, una biblioteca para cargar imágenes
 
@@ -36,6 +41,7 @@ import java.io.IOException; // Importa IOException para manejar excepciones de e
 public class PerfilFragment extends Fragment {
     private FragmentPerfilBinding binding; // Variable para el binding del fragmento
     private ActivityResultLauncher<Intent> galleryLauncher; // Launcher para abrir la galería
+    private PostViewModel postViewModel;
 
     // Constructor vacío por defecto
     public PerfilFragment() {
@@ -45,14 +51,50 @@ public class PerfilFragment extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstantState) {
         binding = FragmentPerfilBinding.inflate(inflater, container, false); // Infla el layout del fragmento utilizando View Binding
+        postViewModel = new ViewModelProvider(this).get(PostViewModel.class);
 
         setupMenu(); // Configura el menú del fragmento
         setupToolbar(); // Configura la barra de herramientas (toolbar)
         displayUserInfo(); // Muestra la información del usuario actual en la interfaz
         setupGalleryLauncher(); // Configura el launcher para abrir la galería de imágenes
-        setupProfileImageClick(); // Configura el evento de clic en la imagen de perfil
+        setupProfileImageClick(); // Configura el evento de clic en la imagen de
+        setupViewModel(); // Configura el ViewModel
 
         return binding.getRoot(); // Devuelve la vista raíz del binding
+    }
+
+    private void setupViewModel() {
+        // Configurar el layout manager del RecyclerView
+        binding.recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+
+        // Observar los posts del usuario actual
+        postViewModel.getPostsByCurrentUser().observe(getViewLifecycleOwner(), posts -> {
+            if (posts != null && !posts.isEmpty()) {
+                Log.d("PerfilFragment", "Número de posts: " + posts.size());
+                PostAdapter adapter = new PostAdapter(posts);
+                binding.recyclerView.setAdapter(adapter);
+
+                // Actualizar contador de publicaciones
+                if (binding.cantPost != null) {
+                    binding.cantPost.setText(String.valueOf(posts.size()));
+                }
+
+                if (getActivity() instanceof HomeActivity) {
+                    ((HomeActivity) requireActivity()).hideProgressBar();
+                }
+            } else {
+                Log.d("PerfilFragment", "No hay posts disponibles.");
+
+                // Actualizar contador de publicaciones a cero
+                if (binding.cantPost != null) {
+                    binding.cantPost.setText("0");
+                }
+
+                if (getActivity() instanceof HomeActivity) {
+                    ((HomeActivity) requireActivity()).hideProgressBar();
+                }
+            }
+        });
     }
 
     private void setupMenu() {

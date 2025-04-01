@@ -3,7 +3,8 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="@color/background">
     <!-- AppBarLayout con CollapsingToolbarLayout -->
     <com.google.android.material.appbar.AppBarLayout
         android:layout_width="match_parent"
@@ -14,7 +15,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             app:layout_scrollFlags="scroll|exitUntilCollapsed"
-            app:contentScrim="?attr/colorPrimary">
+            app:contentScrim="@color/mustard">
             <ImageView
                 android:id="@+id/uploadImage"
                 android:layout_width="match_parent"
@@ -33,12 +34,14 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         app:layout_behavior="@string/appbar_scrolling_view_behavior"
-        android:padding="16dp">
+        android:padding="16dp"
+        android:background="@color/background">
         <androidx.cardview.widget.CardView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
             app:cardCornerRadius="16dp"
+            app:cardBackgroundColor="@color/surface"
             app:cardElevation="8dp">
             <LinearLayout
                 android:layout_width="match_parent"
@@ -69,7 +72,8 @@
                     android:hint="@string/lugar_que_visitaste"
                     android:padding="16dp"
                     android:textSize="13sp"
-                    android:textColor="@color/mustard" />
+                    android:textColor="@color/on_surface"
+                    android:textColorHint="@color/border_dark" />
                 <EditText
                     android:id="@+id/etDescripcion"
                     android:layout_width="match_parent"
@@ -79,7 +83,8 @@
                     android:hint="@string/describe_tu_experiencia"
                     android:padding="16dp"
                     android:textSize="13sp"
-                    android:textColor="@color/mustard" />
+                    android:textColor="@color/on_surface"
+                    android:textColorHint="@color/border_dark" />
                 <Spinner
                     android:id="@+id/spinnerCategoria"
                     android:layout_width="match_parent"
@@ -96,7 +101,8 @@
                     android:hint="@string/duraci_n_del_viaje_ej_3_d_as"
                     android:gravity="start|center_vertical"
                     android:inputType="number"
-                    android:textColor="@color/mustard"
+                    android:textColor="@color/on_surface"
+                    android:textColorHint="@color/border_dark"
                     android:textSize="13sp"/>
                 <EditText
                     android:id="@+id/etPresupuesto"
@@ -108,13 +114,16 @@
                     android:layout_marginTop="10dp"
                     android:padding="16dp"
                     android:gravity="start|center_vertical"
-                    android:textColor="@color/mustard"
+                    android:textColor="@color/on_surface"
+                    android:textColorHint="@color/border_dark"
                     android:textSize="13sp"/>
                 <Button
                     android:id="@+id/btnPublicar"
                     android:layout_width="match_parent"
                     android:layout_height="60dp"
                     android:layout_marginTop="16dp"
+                    android:backgroundTint="@color/mustard"
+                    android:textColor="@color/on_mustard"
                     android:text="@string/publicar"
                     android:textSize="16sp" />
             </LinearLayout>

@@ -5,6 +5,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/background"
     tools:context="view.fragments.PerfilFragment">
 
     <!-- AppBarLayout for the header -->
@@ -17,7 +18,8 @@
         <com.google.android.material.appbar.CollapsingToolbarLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            app:layout_scrollFlags="scroll|exitUntilCollapsed">
+            app:layout_scrollFlags="scroll|exitUntilCollapsed"
+            app:contentScrim="@color/mustard">
 
             <FrameLayout
                 android:layout_width="match_parent"
@@ -31,7 +33,7 @@
                     android:layout_gravity="center_horizontal|bottom"
                     android:layout_marginBottom="20dp"
                     android:src="@drawable/ic_person"
-                    app:civ_circle_background_color="@color/black"
+                    app:civ_circle_background_color="@color/mustard"
                     app:civ_border_color="@color/white"
                     app:civ_border_width="5dp" />
             </FrameLayout>
@@ -51,7 +53,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Red Social"
-                    android:textColor="@color/white"
+                    android:textColor="@color/on_mustard"
                     android:textStyle="bold"
                     android:textSize="12sp" />
 
@@ -60,7 +62,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Red Social"
-                    android:textColor="@color/white"
+                    android:textColor="@color/on_mustard"
                     android:textSize="11sp"
                     android:textStyle="bold"
                     tools:ignore="TextSizeCheck" />
@@ -69,7 +71,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Red Social"
-                    android:textColor="@color/white"
+                    android:textColor="@color/on_mustard"
                     android:textSize="11sp"
                     android:textStyle="bold"
                     tools:ignore="TextSizeCheck" />
@@ -80,9 +82,10 @@
     <!-- Main Content -->
     <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior"
-        android:padding="16dp">
+        android:layout_height="match_parent"
+        android:padding="16dp"
+        android:paddingBottom="80dp"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -110,22 +113,14 @@
                     android:layout_marginTop="5dp"
                     app:tabIndicatorColor="@color/mustard"
                     app:tabIndicatorHeight="4dp" />
-                <ImageView
-                    android:id="@+id/fabComentar"
-                    android:layout_width="50dp"
-                    android:layout_height="50dp"
-                    android:src="@drawable/ic_comentario"
-                    android:scaleType="centerCrop"
-                    android:layout_margin="30dp"
-                    android:layout_gravity="end|bottom"
-                    android:padding="7dp"/>
+
             </LinearLayout>
             <!-- Post Details -->
             <TextView
                 android:id="@+id/lugar"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textColor="@color/black"
+                android:textColor="@color/on_background"
                 android:textSize="14sp"
                 android:textStyle="bold"
                 android:layout_marginBottom="8dp" />
@@ -134,7 +129,7 @@
                 android:id="@+id/categoria"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textColor="@color/black"
+                android:textColor="@color/on_background"
                 android:textSize="14sp"
                 android:textStyle="bold"
                 android:layout_marginBottom="8dp" />
@@ -143,7 +138,7 @@
                 android:id="@+id/description"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textColor="@color/black"
+                android:textColor="@color/on_background"
                 android:textSize="14sp"
                 android:layout_marginBottom="8dp" />
 
@@ -151,7 +146,7 @@
                 android:id="@+id/duracion"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textColor="@color/black"
+                android:textColor="@color/on_background"
                 android:textSize="14sp"
                 android:layout_marginBottom="8dp" />
 
@@ -159,7 +154,7 @@
                 android:id="@+id/presupuesto"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textColor="@color/black"
+                android:textColor="@color/on_background"
                 android:textSize="14sp"
                 android:layout_marginBottom="8dp" />
 
@@ -168,6 +163,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
                 app:cardCornerRadius="8dp"
+                app:cardBackgroundColor="@color/surface"
                 app:cardElevation="4dp">
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -175,31 +171,56 @@
                     android:orientation="vertical"
                     android:padding="8dp">
 
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="Comentarios"
-                    android:textSize="16sp"
-                    android:textStyle="bold"
-                    android:textColor="@color/black"
-                    android:padding="8dp"/>
-                <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/rvComentarios"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:nestedScrollingEnabled="false"
-                    app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"/>
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Comentarios"
+                        android:textSize="16sp"
+                        android:textStyle="bold"
+                        android:textColor="@color/mustard"
+                        android:padding="8dp"/>
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/rvComentarios"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:nestedScrollingEnabled="false"
+                        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"/>
                 </LinearLayout>
             </androidx.cardview.widget.CardView>
-            <Button
-                android:id="@+id/btnEliminarPost"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Eliminar Post"
-                android:layout_marginTop="16dp"
-                android:layout_gravity="center_horizontal"/>
-
         </LinearLayout>
     </androidx.core.widget.NestedScrollView>
+
+    <!-- Action Buttons -->
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|end"
+        android:layout_margin="16dp"
+        android:orientation="horizontal">
+
+        <Button
+            android:id="@+id/btnEliminarPost"
+            android:layout_width="wrap_content"
+            android:layout_height="48dp"
+            android:backgroundTint="@color/error"
+            android:text="Eliminar Post"
+            android:textColor="@color/white"
+            android:textSize="14sp"
+            android:paddingStart="16dp"
+            android:paddingEnd="16dp"
+            android:layout_marginEnd="8dp"
+            android:elevation="2dp"
+            android:stateListAnimator="@null" />
+
+        <ImageView
+            android:id="@+id/fabComentar"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:src="@drawable/ic_comentario"
+            android:scaleType="centerCrop"
+            android:padding="7dp"
+            android:background="@color/mustard"
+            android:elevation="2dp" />
+    </LinearLayout>
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
 

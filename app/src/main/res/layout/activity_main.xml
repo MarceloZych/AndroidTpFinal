@@ -1,10 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.coordinatorlayout.widget.CoordinatorLayout  xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.coordinatorlayout.widget.CoordinatorLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/background"
     tools:context=".view.MainActivity">
 
     <LinearLayout
@@ -25,13 +27,14 @@
             <View
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:background="@color/mustard" />
+                android:background="@color/mustard_dark" />
 
             <ImageView
                 android:layout_width="218dp"
                 android:layout_height="180dp"
                 android:layout_gravity="center|top"
-                android:src="@drawable/opticdev_gray" />
+                android:src="@drawable/opticdev_gray"
+                app:tint="@color/white" />
         </io.github.florent37.shapeofview.shapes.DiagonalView>
 
         <LinearLayout
@@ -46,12 +49,16 @@
             <ImageView
                 android:layout_width="wrap_content"
                 android:layout_height="65dp"
-                android:src="@drawable/ic_mail" />
+                android:src="@drawable/ic_mail"
+                app:tint="@color/mustard_dark" />
 
             <com.google.android.material.textfield.TextInputLayout
                 style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                app:boxBackgroundColor="@color/white"
+                app:hintTextColor="@color/mustard_dark"
+                app:boxStrokeColor="@color/mustard_dark">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/tietUsuario"
@@ -59,8 +66,8 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:hint="Correo Electronico"
-                    android:inputType="textEmailAddress">
-                </com.google.android.material.textfield.TextInputEditText>
+                    android:inputType="textEmailAddress"
+                    android:textColor="@color/black"/>
             </com.google.android.material.textfield.TextInputLayout>
         </LinearLayout>
 
@@ -76,20 +83,24 @@
             <ImageView
                 android:layout_width="wrap_content"
                 android:layout_height="65dp"
-                android:src="@drawable/ic_lock" />
+                android:src="@drawable/ic_lock"
+                app:tint="@color/mustard_dark"/>
 
             <com.google.android.material.textfield.TextInputLayout
                 style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                app:boxBackgroundColor="@color/white"
+                app:hintTextColor="@color/mustard_dark"
+                app:boxStrokeColor="@color/mustard_dark">
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/etPassword"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:hint="Contraseña"
                     android:inputType="textPassword"
-                    android:singleLine="true">
-                </com.google.android.material.textfield.TextInputEditText>
+                    android:singleLine="true"
+                    android:textColor="@color/black"/>
             </com.google.android.material.textfield.TextInputLayout>
         </LinearLayout>
 
@@ -101,10 +112,11 @@
             android:layout_marginLeft="40dp"
             android:layout_marginTop="80dp"
             android:layout_marginRight="40dp"
-            android:backgroundTint="@color/mustard"
-            android:gravity="center"
+            android:backgroundTint="@color/mustard_dark"
+            android:textColor="@color/white"
             android:text="INICIAR SESION"
-            android:textColorLink="#8213C8" />
+            android:textAllCaps="false"
+            style="@style/Widget.MaterialComponents.Button" />
     </LinearLayout>
 
     <LinearLayout
@@ -121,6 +133,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="¿No tienes una cuenta ?"
+            android:textColor="@color/black"
             android:textSize="17sp" />
         <TextView
             android:id="@+id/tvRegistrar"
@@ -128,9 +141,9 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="5dp"
             android:text="REGISTRAR AQUI"
+            android:textColor="@color/mustard_dark"
             android:textSize="17sp"
             android:textStyle="bold" />
-
 
     </LinearLayout>
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

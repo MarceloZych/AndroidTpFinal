@@ -32,6 +32,10 @@ public class PostViewModel extends ViewModel {
         postProvider = new PostProvider(); // Crea una nueva instancia del PostProvider
     }
 
+    public LiveData<List<Post>> getPostsByCurrentUser() {
+        return postProvider.getPostsByCurrentUser();
+    }
+
     // Método público para publicar un nuevo post
     public void publicar(Post post) {
         postProvider.addPost(post) // Llama al método addPost en el PostProvider para agregar el post

@@ -3,6 +3,10 @@
     <style name="Base.Theme.ProyectoIntegrador" parent="Theme.Material3.DayNight.NoActionBar">
         <!-- Customize your light theme here. -->
         <!-- <item name="colorPrimary">@color/my_light_primary</item> -->
+        <item name="colorPrimary">@color/mustard</item>
+        <item name="colorPrimaryDark">@color/mustard_dark</item>
+        <item name="colorAccent">@color/mustard_light</item>
+        <item name="colorError">@color/error</item>
     </style>
 
     <style name="Theme.ProyectoIntegrador" parent="Base.Theme.ProyectoIntegrador" />

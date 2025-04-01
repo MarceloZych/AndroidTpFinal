@@ -3,6 +3,7 @@ package com.example.proyectointegrador.viewmodel;
 import android.util.Log;
 
 import androidx.lifecycle.LiveData;
+import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
 import com.example.proyectointegrador.model.Mensaje;
@@ -12,59 +13,92 @@ import com.parse.ParseUser;
 import java.util.List;
 
 public class ChatViewModel extends ViewModel {
-    private final ChatProvider chatProvider = new ChatProvider();
-    /**
-     * Obtiene los mensajes entre el usuario actual y otro usuario específico.
-     *
-     * @param otroUsuario El ParseUser con el que se está chateando.
-     * @return Un LiveData que contiene la lista de mensajes.
-     */
-    public LiveData<List<Mensaje>> getMensajes(ParseUser otroUsuario) {
-        return chatProvider.cargarMensajes(otroUsuario);
+    private static final String TAG = "ChatViewModel";
+
+    private final ChatProvider chatProvider;
+    private final MutableLiveData<ChatState> chatState = new MutableLiveData<>(ChatState.initial());
+
+    public ChatViewModel() {
+        this.chatProvider = new ChatProvider();
     }
-    /**
-     * Envía un mensaje de texto desde el remitente al destinatario.
-     *
-     * @param texto        El contenido del mensaje.
-     * @param remitente    El ParseUser que envía el mensaje.
-     * @param destinatario El ParseUser que recibe el mensaje.
-     */
-    public void enviarMensaje(String texto, ParseUser remitente, ParseUser destinatario) {
-        if (texto == null || texto.trim().isEmpty()){
-            Log.w("ChatViewModel", "Intento de enviar mensaje vacio");
+
+    public LiveData<ChatState> getChatState() {
+        return chatState;
+    }
+
+    public void loadMessages(ParseUser otherUser) {
+        if (otherUser == null) {
+            chatState.setValue(ChatState.error("No chat user provided"));
             return;
         }
-
-        chatProvider.enviarMensaje(texto, remitente, destinatario);
+        chatState.setValue(ChatState.loading());
+        chatProvider.cargarMensajes(otherUser).observeForever(messages -> {
+            if (messages != null) {
+                chatState.setValue(ChatState.success(messages));
+            } else {
+                chatState.setValue(ChatState.error("Failed to load messages"));
+            }
+        });
     }
 
-    /**
-     * Fuerza una actualización manual de los mensajes.
-     */
+    public void sendMessage(String text, ParseUser sender, ParseUser recipient) {
+        if (text == null || text.trim().isEmpty()) {
+            return;
+        }
+        chatProvider.enviarMensaje(text, sender, recipient);
+    }
+
     public void refreshMessages() {
         chatProvider.pollForNewMessages();
     }
 
-    /**
-     * Pausa el polling de nuevos mensajes.
-     */
-    public void pausePolling() {
-        chatProvider.stopPolling();
-    }
-
-    /**
-     * Reanuda el polling de nuevos mensajes.
-     */
     public void resumePolling() {
         chatProvider.startPolling();
     }
 
-    /**
-     * Limpia los recursos cuando el ViewModel se destruye.
-     */
+    public void pausePolling() {
+        chatProvider.stopPolling();
+    }
+
     @Override
     protected void onCleared() {
         super.onCleared();
         chatProvider.cleanup();
+    }
+
+    public static class ChatState {
+        private final Status status;
+        private final List<Mensaje> messages;
+        private final String errorMessage;
+
+        private ChatState(Status status, List<Mensaje> messages, String errorMessage) {
+            this.status = status;
+            this.messages = messages;
+            this.errorMessage = errorMessage;
+        }
+
+        public static ChatState initial() {
+            return new ChatState(Status.INITIAL, null, null);
+        }
+
+        public static ChatState loading() {
+            return new ChatState(Status.LOADING, null, null);
+        }
+
+        public static ChatState success(List<Mensaje> messages) {
+            return new ChatState(Status.SUCCESS, messages, null);
+        }
+
+        public static ChatState error(String errorMessage) {
+            return new ChatState(Status.ERROR, null, errorMessage);
+        }
+
+        public Status getStatus() { return status; }
+        public List<Mensaje> getMessages() { return messages; }
+        public String getErrorMessage() { return errorMessage; }
+    }
+
+    public enum Status {
+        INITIAL, LOADING, SUCCESS, ERROR
     }
 }

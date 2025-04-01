@@ -3,6 +3,8 @@ package com.example.proyectointegrador.providers; // Paquete donde se encuentra 
 import android.util.Log; // Importa Log para registrar mensajes en el Logcat
 import androidx.lifecycle.LiveData; // Importa LiveData para observar datos que pueden cambiar
 import androidx.lifecycle.MutableLiveData; // Importa MutableLiveData para datos que pueden ser modificados
+
+import com.example.proyectointegrador.model.Comentarios;
 import com.example.proyectointegrador.model.Post; // Importa el modelo Post
 import com.example.proyectointegrador.model.User; // Importa el modelo User
 import com.parse.ParseException; // Importa ParseException para manejar errores de Parse
@@ -263,10 +265,10 @@ public class PostProvider {
 
     public void saveComment(String postId, String commentText, ParseUser currentUser, SaveCallback callback) {
         ParseObject post = ParseObject.createWithoutData("Post", postId);
-        ParseObject comentario = new ParseObject("Comentario");
-        comentario.put("texto", commentText);
-        comentario.put("post", post);
-        comentario.put("user", currentUser);
+        Comentarios comentario = new Comentarios();
+        comentario.setTexto(commentText);
+        comentario.setPost((Post) post);
+        comentario.setUser(currentUser);
         comentario.saveInBackground(callback);
     }
 }

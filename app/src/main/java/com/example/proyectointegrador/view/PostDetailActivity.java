@@ -6,6 +6,7 @@ import android.widget.EditText; // Importa EditText para manejar campos de texto
 import android.widget.LinearLayout; // Importa LinearLayout para crear un layout vertical
 import android.widget.RelativeLayout; // Importa RelativeLayout para crear un layout relativo
 import android.widget.Toast; // Importa Toast para mostrar mensajes breves al usuario
+import com.example.proyectointegrador.model.User;
 
 import androidx.appcompat.app.AlertDialog; // Importa AlertDialog para mostrar diálogos de alerta
 import androidx.appcompat.app.AppCompatActivity; // Importa AppCompatActivity para utilizar características modernas de Android
@@ -40,14 +41,17 @@ public class PostDetailActivity extends AppCompatActivity {
         binding = ActivityPostDetailBinding.inflate(getLayoutInflater()); // Infla el layout utilizando View Binding
         setContentView(binding.getRoot()); // Establece el contenido de la actividad a la vista inflada
 
-        postId = getIntent().getStringExtra("postId"); // Obtiene el ID del post desde los extras del Intent
-        if (postId != null) {
-            viewModel.fetchComments(postId);
-        }
+        viewModel = new ViewModelProvider(this).get(PostDetailViewModel.class);
+        postId = getIntent().getStringExtra("postId");
 
         binding.rvComentarios.setLayoutManager(new LinearLayoutManager(this));
         comentarioAdapter = new ComentarioAdapter(new ArrayList<>());
         binding.rvComentarios.setAdapter(comentarioAdapter);
+
+        if (postId != null) {
+            viewModel.fetchComments(postId);
+            viewModel.getPostDetail(postId);
+        }
 
         viewModel.getCommentsLiveData().observe(this, comentarios -> {
             comentarioAdapter.setComentarios(comentarios);
@@ -65,11 +69,32 @@ public class PostDetailActivity extends AppCompatActivity {
             binding.btnEliminarPost.setVisibility(View.GONE);
         }
 
+        setupDeleteButtonVisibility();
         detailInfo(); // Muestra la información del post en la interfaz
         setupObservers(); // Configura los observadores del ViewModel
 
         binding.fabComentar.setOnClickListener(v -> showDialogComment());  // Configura el evento al hacer clic en el botón flotante (FAB) para comentar.
     }
+
+        private void setupDeleteButtonVisibility() {
+            ParseUser currentUser = ParseUser.getCurrentUser();
+            if (currentUser == null) {
+                binding.btnEliminarPost.setVisibility(View.GONE);
+                return;
+            }
+
+            viewModel.getPostLiveData().observe(this, post -> {
+                if (post != null && postId != null) {
+                    User postOwner = post.getUser();
+                    if (postOwner != null && currentUser.getUsername().equals(postOwner.getUsername())) {
+                        binding.btnEliminarPost.setVisibility(View.VISIBLE);
+                        binding.btnEliminarPost.setOnClickListener(v -> confirmaBorrar());
+                    } else {
+                        binding.btnEliminarPost.setVisibility(View.GONE);
+                    }
+                }
+            });
+        }
 
     private void confirmaBorrar() {
         AlertDialog.Builder alert = new AlertDialog.Builder(this);
@@ -127,20 +152,17 @@ public class PostDetailActivity extends AppCompatActivity {
     }
 
     private void setupObservers() {
-        viewModel.getCommentsLiveData().observe(this, comments -> {
-            // Aquí puedes actualizar la UI con los comentarios obtenidos (actualmente comentado).
-            //updateUI(comments);  // Método ficticio donde puedes implementar la lógica para actualizar la UI con los comentarios.
+        viewModel.getCommentsLiveData().observe(this, comentarios -> {
+            if (comentarios != null) {
+                comentarioAdapter.setComentarios(comentarios);
+                comentarioAdapter.notifyDataSetChanged();
+            }
         });
 
         viewModel.getErrorLiveData().observe(this, error -> {
             if (error != null) {
-                Toast.makeText(this, "ERROR: " + error, Toast.LENGTH_SHORT).show();  // Muestra un mensaje si hay un error en la obtención de comentarios.
+                Toast.makeText(this, "ERROR: " + error, Toast.LENGTH_SHORT).show();
             }
-        });
-
-        viewModel.getSuccessLiveData().observe(this, message -> {
-            Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
-            finish();
         });
     }
 

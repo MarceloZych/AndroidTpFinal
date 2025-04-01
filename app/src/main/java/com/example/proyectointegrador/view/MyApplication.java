@@ -3,6 +3,8 @@ package com.example.proyectointegrador.view; // Paquete donde se encuentra la cl
 import android.app.Application; // Importa la clase Application para inicializar componentes de la aplicación
 
 import com.example.proyectointegrador.R; // Importa los recursos del proyecto
+import com.example.proyectointegrador.model.Comentarios;
+import com.example.proyectointegrador.model.Mensaje;
 import com.example.proyectointegrador.model.Post; // Importa el modelo Post
 import com.example.proyectointegrador.model.User; // Importa el modelo User
 import com.parse.Parse; // Importa Parse para inicializar y configurar Parse
@@ -23,6 +25,8 @@ public class MyApplication extends Application {
         // Registra las subclases de ParseObject que se utilizarán en la aplicación
         ParseObject.registerSubclass(Post.class); // Registra la subclase Post
         ParseObject.registerSubclass(User.class); // Registra la subclase User
+        ParseObject.registerSubclass(Comentarios.class);
+        ParseObject.registerSubclass(Mensaje.class);
 
         // Inicializa Parse con la configuración necesaria
         Parse.initialize(new Parse.Configuration.Builder(this)

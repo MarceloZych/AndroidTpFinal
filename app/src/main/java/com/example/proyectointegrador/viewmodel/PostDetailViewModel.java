@@ -4,6 +4,7 @@ import androidx.lifecycle.LiveData; // Importa LiveData para observar datos que 
 import androidx.lifecycle.MutableLiveData; // Importa MutableLiveData para datos que pueden ser modificados
 import androidx.lifecycle.ViewModel; // Importa ViewModel para crear un modelo de datos que sobreviva a cambios de configuración
 
+import com.example.proyectointegrador.model.Post;
 import com.parse.ParseUser; // Importa ParseUser para trabajar con usuarios de Parse
 import com.example.proyectointegrador.providers.PostProvider; // Importa PostProvider para manejar operaciones relacionadas con los posts
 import com.parse.ParseObject; // Importa ParseObject para trabajar con objetos de Parse
@@ -16,6 +17,7 @@ public class PostDetailViewModel extends ViewModel {
     private final MutableLiveData<String> errorLivedData = new MutableLiveData<>(); // LiveData que contiene mensajes de error
     private final MutableLiveData<String> successLiveData = new MutableLiveData<>();
     private final PostProvider postProvider; // Proveedor que maneja operaciones relacionadas con los posts
+    private final MutableLiveData<Post> postLiveData = new MutableLiveData<>();
 
     // Constructor privado para inicializar el ViewModel y su proveedor
     public PostDetailViewModel() {
@@ -67,6 +69,20 @@ public class PostDetailViewModel extends ViewModel {
                 fetchComments(postId); // Vuelve a obtener los comentarios del post después de agregar uno nuevo
             } else { // Si hay un error al guardar el comentario
                 errorLivedData.postValue(e.getMessage()); // Establece el mensaje de error en LiveData
+            }
+        });
+    }
+
+    public LiveData<Post> getPostLiveData() { // Add this
+        return postLiveData;
+    }
+
+    public void getPostDetail(String postId) { // Add this
+        postProvider.getPostDetail(postId).observeForever(post -> {
+            if (post != null) {
+                postLiveData.setValue(post);
+            } else {
+                errorLivedData.setValue("No se pudo cargar el post");
             }
         });
     }

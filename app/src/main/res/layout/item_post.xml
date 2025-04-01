@@ -19,14 +19,19 @@
             android:layout_width="match_parent"
             android:layout_height="45dp"
             android:layout_marginTop="10dp"
-            android:text="Titulo" />
+            android:text="Titulo"
+            android:textColor="@color/mustard"
+            android:textSize="18sp"
+            android:textStyle="bold"/>
 
         <TextView
             android:id="@+id/tvDescripcion"
             android:layout_width="match_parent"
             android:layout_height="110dp"
             android:layout_marginTop="10dp"
-            android:text="Descripción" />
+            android:text="Descripción"
+            android:textColor="@color/on_background"
+            android:textSize="14sp" />
 
         <ImageView
             android:id="@+id/ivImage1"

@@ -11,8 +11,8 @@
     </string-array>
 
     <string name="back4app_server_url">https://parseapi.back4app.com/</string>
-    <string name="back4app_app_id">vS5bt3pFabQRBPYNGCka2UlZh47CtAnUF6qZNgHM</string>
-    <string name="back4app_client_key">Z3xseeaPA2IDEdKOA7rOD7WUelC0rnHtPwu4h4gb</string>
+    <string name="back4app_app_id">646sIdJnXsD1PQnHNnfqqTN6qV3S4FALSeNdhbFU</string>
+    <string name="back4app_client_key">a7bh0L1k0RR8fKtUd79MGGCwvljL6y4CNFPoBdPb</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="realizar_un_post">REALIZAR UN POST</string>
@@ -23,4 +23,7 @@
     <string name="publicar">Publicar</string>
     <string name="cargando">Cargando datos...</string>
     <string name="Chats">Chats</string>
+    <string name="no_user_selected">Selecciona un usuario para chatear</string>
+    <string name="type_message_hint">Escribe un mensaje...</string>
+    <string name="send_message_desc">Enviar mensaje</string>
 </resources>

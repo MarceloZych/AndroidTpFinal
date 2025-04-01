@@ -32,7 +32,7 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onStart() {
-        super.onStart(); // Llama al método onStart de la clase padre
+        super.onStart();
 
         //Aquí se puede verificar si hay una sesión activa y redirigir al usuario a HomeActivity.
         //sDescomentando este bloque, se puede observar si el usuario está logueado.

@@ -12,10 +12,10 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 import com.example.proyectointegrador.databinding.ActivityHomeBinding;
-import com.example.proyectointegrador.view.fragments.ChatsFragment;
 import com.example.proyectointegrador.view.fragments.FiltrosFragment;
 import com.example.proyectointegrador.view.fragments.HomeFragment;
 import com.example.proyectointegrador.view.fragments.PerfilFragment;
+import com.example.proyectointegrador.view.fragments.UserFragment;
 import com.google.android.material.navigation.NavigationBarView;
 
 public class HomeActivity extends AppCompatActivity {
@@ -41,7 +41,7 @@ public class HomeActivity extends AppCompatActivity {
                 if (item.getItemId() == R.id.itemHome) {
                     openFragment(HomeFragment.newInstance()); // Abre HomeFragment
                 } else if (item.getItemId() == R.id.itemChats) {
-                    openFragment(new ChatsFragment()); // Abre ChatsFragment
+                    openFragment(new UserFragment()); // Abre ChatsFragment
                 } else if (item.getItemId() == R.id.itemPerfil) {
                     openFragment(new PerfilFragment()); // Abre PerfilFragment
                 } else if (item.getItemId() == R.id.itemFiltros) {
