@@ -13,6 +13,9 @@
     <string name="back4app_server_url">https://parseapi.back4app.com/</string>
     <string name="back4app_app_id">646sIdJnXsD1PQnHNnfqqTN6qV3S4FALSeNdhbFU</string>
     <string name="back4app_client_key">a7bh0L1k0RR8fKtUd79MGGCwvljL6y4CNFPoBdPb</string>
+    <!--<string name="back4app_server_url">https://parseapi.back4app.com/</string>
+    <string name="back4app_app_id">AdRlmuDnT2O0oq45TrYsLK1U6Jt01n36Cjla0yl5</string>
+    <string name="back4app_client_key">PacnOK5ckvG33hMUL2Gco4PBy1rkXUQ0dDar0hbD</string>-->
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="realizar_un_post">REALIZAR UN POST</string>
